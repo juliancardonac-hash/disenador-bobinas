@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diseño de bobina — laboratorio de electricidad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#eef2f2;
+    --paper-line:#c9d6d9;
+    --ink:#132227;
+    --ink-soft:#3f5a61;
+    --copper:#b5651d;
+    --copper-dark:#8a4c14;
+    --core-tint:#5c6f95;
+    --green:#3f7d52;
+    --green-bg:#e4efe6;
+    --amber:#a8701f;
+    --amber-bg:#f5ead2;
+    --red:#a13c34;
+    --red-bg:#f6e0dd;
+    --panel:#ffffff;
+    --line:#c3ccca;
+    --radius:3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, var(--paper-line) 27px, var(--paper-line) 28px),
+      repeating-linear-gradient(90deg, transparent, transparent 27px, var(--paper-line) 27px, var(--paper-line) 28px),
+      var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+    padding:0 0 80px 0;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+  header.top{
+    border-bottom:2px solid var(--ink);
+    background:var(--paper);
+    padding:36px 0 22px 0;
+  }
+  header.top .wrap{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px;}
+  h1{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:2.35rem;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin:0 0 6px 0;
+  }
+  .subtitle{
+    max-width:520px;
+    color:var(--ink-soft);
+    font-size:0.98rem;
+    margin-top:6px;
+  }
+  .lab-meta{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    color:var(--ink-soft);
+    text-align:right;
+    line-height:1.7;
+  }
+
+  main.layout{
+    display:block;
+    border-left:2px solid var(--ink);
+    border-right:2px solid var(--ink);
+    max-width:820px;
+    margin:0 auto;
+    background:var(--panel);
+  }
+
+  .panel-form{
+    border-bottom:2px solid var(--ink);
+    padding:28px 26px 32px 26px;
+  }
+  .form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0 32px;
+  }
+  @media (max-width:640px){ .form-grid{grid-template-columns:1fr;} }
+
+  .form-actions{
+    display:flex;
+    gap:10px;
+    margin-top:6px;
+    grid-column:1 / -1;
+  }
+  .form-actions button{flex:1;}
+
+  .panel-results{padding:28px 30px 40px 30px;}
+
+  fieldset{
+    border:none;
+    padding:0;
+    margin:0 0 26px 0;
+  }
+  legend{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    padding:0 0 8px 0;
+    border-bottom:1px solid var(--line);
+    width:100%;
+    margin-bottom:14px;
+    text-transform:lowercase;
+  }
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;
+    font-size:0.86rem;
+    color:var(--ink);
+    margin-bottom:4px;
+  }
+  .field .hint{
+    display:block;
+    font-size:0.74rem;
+    color:var(--ink-soft);
+    margin-top:3px;
+  }
+  input[type=number], select{
+    width:100%;
+    padding:8px 10px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:#fbfcfb;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.92rem;
+    color:var(--ink);
+  }
+  input[type=number]:focus, select:focus{
+    outline:2px solid var(--copper);
+    outline-offset:1px;
+    border-color:var(--copper);
+  }
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+
+  .awg-readout{
+    margin-top:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--copper-dark);
+    background:#fbf3ea;
+    border:1px dashed var(--copper);
+    padding:6px 9px;
+    border-radius:var(--radius);
+  }
+
+  .core-note{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    background:#eef1fb;
+    border-left:3px solid var(--core-tint);
+    padding:8px 10px;
+    margin-top:8px;
+    border-radius:0 var(--radius) var(--radius) 0;
+  }
+
+  button.calc{
+    width:100%;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    padding:12px 14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.88rem;
+    letter-spacing:0.02em;
+    border-radius:var(--radius);
+    cursor:pointer;
+    margin-top:6px;
+  }
+  button.calc:hover{background:var(--copper-dark);}
+  button.calc:focus-visible{outline:3px solid var(--copper); outline-offset:2px;}
+  button.calc.secondary{
+    background:none;
+    border:1px solid var(--ink);
+    color:var(--ink);
+  }
+  button.calc.secondary:hover{background:var(--ink); color:#fff;}
+  .example-label{
+    font-size:0.78rem;
+    color:var(--copper-dark);
+    font-family:'IBM Plex Mono', monospace;
+    margin:8px 0 0 0;
+    min-height:1.2em;
+  }
+
+  /* results */
+  .section-title{
+    font-family:'Source Serif 4', serif;
+    font-size:1.3rem;
+    font-weight:600;
+    margin:0 0 4px 0;
+  }
+  .section-sub{color:var(--ink-soft); font-size:0.85rem; margin-bottom:16px;}
+
+  .calc-line{
+    display:flex; justify-content:space-between; gap:10px;
+    padding:6px 0;
+    border-bottom:1px dotted var(--line);
+    font-size:0.9rem;
+  }
+  .calc-line .k{color:var(--ink-soft);}
+  .calc-line .v{font-family:'IBM Plex Mono', monospace; font-weight:500;}
+
+  .metrics-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(190px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin:18px 0 26px 0;
+  }
+  .metric{
+    background:var(--panel);
+    padding:14px 14px 12px 14px;
+  }
+  .metric .label{font-size:0.72rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace;}
+  .metric .value{font-family:'IBM Plex Mono', monospace; font-size:1.28rem; font-weight:600; margin-top:4px;}
+  .metric .value .unit{font-size:0.78rem; font-weight:400; color:var(--ink-soft); margin-left:2px;}
+
+  .banner{
+    border:1px solid; border-radius:var(--radius);
+    padding:14px 16px;
+    margin:6px 0 24px 0;
+    font-size:0.92rem;
+  }
+  .banner .flag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.74rem;
+    font-weight:600;
+    margin-bottom:6px;
+    display:block;
+  }
+  .banner.verde{background:var(--green-bg); border-color:var(--green); color:#204a2c;}
+  .banner.verde .flag{color:var(--green);}
+  .banner.amarillo{background:var(--amber-bg); border-color:var(--amber); color:#5c3f0f;}
+  .banner.amarillo .flag{color:var(--amber);}
+  .banner.rojo{background:var(--red-bg); border-color:var(--red); color:#5e211c;}
+  .banner.rojo .flag{color:var(--red);}
+
+  .suggestions{margin:0 0 26px 0; padding:0;}
+  .suggestions li{margin-bottom:7px; font-size:0.9rem;}
+
+  .diagram-wrap{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px;
+    margin-bottom:26px;
+    background:#fbfcfb;
+  }
+  .diagram-wrap svg{width:100%; height:auto; display:block;}
+  .diagram-caption{font-size:0.76rem; color:var(--ink-soft); margin-top:8px; font-family:'IBM Plex Mono', monospace;}
+
+  ol.steps{padding-left:22px; margin:0 0 26px 0;}
+  ol.steps li{margin-bottom:10px; font-size:0.92rem;}
+  ol.steps li b{color:var(--copper-dark);}
+
+  table.spec{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:10px;
+    font-size:0.88rem;
+  }
+  table.spec th, table.spec td{
+    text-align:left;
+    padding:7px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  table.spec th{
+    width:56%;
+    font-weight:400;
+    color:var(--ink-soft);
+  }
+  table.spec td{font-family:'IBM Plex Mono', monospace;}
+
+  .layer-table-caption{
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    margin:0 0 6px 0;
+  }
+  .layer-table-scroll{
+    max-height:260px;
+    overflow-y:auto;
+    border:1px solid var(--line);
+    margin-bottom:22px;
+  }
+  table.layer-table{margin-bottom:0;}
+  table.layer-table th{
+    width:auto;
+    background:#f3f5f4;
+    position:sticky;
+    top:0;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.74rem;
+  }
+  table.layer-table td{font-size:0.86rem;}
+
+  .print-btn{
+    background:none;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    padding:8px 12px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    margin-bottom:20px;
+  }
+  .print-btn:hover{background:var(--ink); color:#fff;}
+
+  .caveat{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    border-top:1px solid var(--line);
+    padding-top:14px;
+    margin-top:6px;
+  }
+
+  @media print{
+    body{background:#fff;}
+    header.top, .panel-form, .print-btn, .diagram-wrap{display:none !important;}
+    main.layout{border:none; max-width:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div>
+      <p class="kicker">laboratorio de electricidad — práctica de bobinas</p>
+      <h1>Cuaderno de diseño de bobina</h1>
+      <p class="subtitle">Introduce lo que sabes del circuito y de la tubería disponible. La herramienta calcula una bobina cilíndrica multicapa razonable para fabricar a mano, y te avisa si el resultado matemático no es práctico de bobinar.</p>
+    </div>
+    <div class="lab-meta">
+      modelo: solenoide multicapa<br>
+      método: Wheeler (aprox.)<br>
+      cobre a 20 °C
+    </div>
+  </div>
+</header>
+
+<div class="wrap" style="padding-top:0;">
+<main class="layout">
+
+  <section class="panel-form">
+    <div class="form-grid">
+    <fieldset>
+      <legend>datos eléctricos</legend>
+      <div class="field">
+        <label for="volt">Voltaje RMS (V)</label>
+        <input type="number" id="volt" value="12" min="0" step="0.1">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="curr">Corriente objetivo (A)</label>
+          <input type="number" id="curr" value="0.5" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label for="freq">Frecuencia (Hz)</label>
+          <input type="number" id="freq" value="60" min="0" step="1">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>datos físicos de la tubería</legend>
+      <div class="field">
+        <label for="dcore">Diámetro interior de la tubería (mm)</label>
+        <input type="number" id="dcore" value="20" min="0.1" step="0.1">
+      </div>
+      <div class="field">
+        <label for="lwind">Longitud disponible para el devanado (mm)</label>
+        <input type="number" id="lwind" value="40" min="0.1" step="0.1">
+      </div>
+      <div class="field">
+        <label for="awg">Calibre del conductor (AWG)</label>
+        <select id="awg"></select>
+        <div class="awg-readout" id="awgReadout"></div>
+      </div>
+    </fieldset>
+
+    <fieldset style="grid-column:1 / -1;">
+      <legend>núcleo</legend>
+      <div class="field">
+        <label for="core">Tipo de núcleo</label>
+        <select id="core">
+          <option value="air">Aire (μr = 1)</option>
+          <option value="ferro">Ferromagnético</option>
+          <option value="ferrite">Ferrita</option>
+        </select>
+      </div>
+      <div class="field" id="muField" style="display:none;">
+        <label for="mu">Permeabilidad relativa aproximada μr</label>
+        <input type="number" id="mu" value="100" min="1" step="1">
+        <span class="hint">Valor aproximado del fabricante o de catálogo.</span>
+      </div>
+      <div class="core-note">
+        Para núcleos reales (varilla, no toroide), la permeabilidad efectiva suele ser mucho menor que la μr del material, por el entrehierro que representa el aire alrededor de la varilla. Trata este cálculo como una estimación educativa, no como un valor garantizado — mide la bobina terminada con un LCR-metro.
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button class="calc" id="calcBtn">Calcular bobina</button>
+      <button class="calc secondary" id="exampleBtn">Cargar ejemplo viable</button>
+      <button class="calc secondary" id="clearBtn">Limpiar</button>
+    </div>
+    <p class="example-label" id="exampleLabel"></p>
+    </div>
+  </section>
+
+  <section class="panel-results" id="results">
+    <!-- filled by JS -->
+  </section>
+
+</main>
+</div>
+
+<script>
+(function(){
+
+  // ---------- data ----------
+  const AWG = {
+    12:{bare:2.053}, 13:{bare:1.828}, 14:{bare:1.628}, 15:{bare:1.450}, 16:{bare:1.291},
+    17:{bare:1.150}, 18:{bare:1.024}, 19:{bare:0.912}, 20:{bare:0.812}, 21:{bare:0.723},
+    22:{bare:0.644}, 23:{bare:0.573}, 24:{bare:0.511}, 25:{bare:0.455}, 26:{bare:0.405},
+    27:{bare:0.361}, 28:{bare:0.321}, 29:{bare:0.286}, 30:{bare:0.255}
+  };
+  Object.keys(AWG).forEach(g=>{
+    AWG[g].ins = AWG[g].bare * 1.08;             // approx. enamel build
+    AWG[g].area = Math.PI * Math.pow(AWG[g].bare/2, 2); // mm^2
+  });
+  const RHO = 0.0175;      // ohm*mm^2/m, copper at 20C
+  const J_MAX = 4;         // A/mm^2, rough natural-convection guideline
+  const MAX_N = 200000;
+
+  // ---------- dom refs ----------
+  const $ = id => document.getElementById(id);
+  const voltEl=$('volt'), currEl=$('curr'), freqEl=$('freq');
+  const dcoreEl=$('dcore'), lwindEl=$('lwind'), awgEl=$('awg');
+  const coreEl=$('core'), muEl=$('mu'), muField=$('muField');
+  const resultsEl=$('results');
+
+  Object.keys(AWG).forEach(g=>{
+    const opt=document.createElement('option');
+    opt.value=g; opt.textContent='AWG '+g;
+    if(g==='20') opt.selected=true;
+    awgEl.appendChild(opt);
+  });
+
+  function updateAwgReadout(){
+    const g=awgEl.value, d=AWG[g];
+    $('awgReadout').textContent = 'AWG seleccionado: AWG '+g+'  ·  diámetro de cobre ≈ '+d.bare.toFixed(3)+' mm  ·  con esmalte ≈ '+d.ins.toFixed(3)+' mm';
+  }
+  updateAwgReadout();
+  awgEl.addEventListener('change', ()=>{updateAwgReadout(); calc();});
+
+  coreEl.addEventListener('change', ()=>{
+    muField.style.display = coreEl.value==='air' ? 'none' : 'block';
+    if(coreEl.value==='ferro') muEl.value=100;
+    if(coreEl.value==='ferrite') muEl.value=800;
+    calc();
+  });
+
+  [voltEl,currEl,freqEl,dcoreEl,lwindEl,muEl].forEach(el=>{
+    el.addEventListener('input', debounce(calc, 250));
+  });
+  $('calcBtn').addEventListener('click', calc);
+
+  function debounce(fn,ms){let t; return (...a)=>{clearTimeout(t); t=setTimeout(()=>fn(...a),ms);};}
+
+  // ---------- default values (used by "Limpiar") ----------
+  const DEFAULTS = {volt:12, curr:0.5, freq:60, dcore:20, lwind:40, awg:'20', core:'air', mu:100};
+
+  // ---------- "Limpiar" clears the form to blank, it does not reload a preset ----------
+  $('clearBtn').addEventListener('click', ()=>{
+    [voltEl,currEl,freqEl,dcoreEl,lwindEl,muEl].forEach(el=>{ el.value=''; });
+    awgEl.selectedIndex = 4; // AWG 20, matches the readout's default gauge
+    coreEl.value='air';
+    muField.style.display='none';
+    updateAwgReadout();
+    exampleIdx = 0;
+    $('exampleLabel').textContent='';
+    resultsEl.innerHTML = '<p style="color:var(--ink-soft)">Formulario limpio. Completa los datos y pulsa «Calcular bobina», o carga un ejemplo viable.</p>';
+    voltEl.focus();
+  });
+
+  // ---------- viable examples ----------
+  // Chosen so the required inductance stays modest relative to the tube size,
+  // so the search converges with a sensible, buildable number of turns.
+  const EXAMPLES = [
+    {name:'Bobina de aire para RF pequeña', volt:5, curr:0.3, freq:2000, dcore:18, lwind:30, awg:'24', core:'air', mu:1},
+    {name:'Choque de audio con núcleo de ferrita', volt:9, curr:0.4, freq:500, dcore:22, lwind:35, awg:'22', core:'ferrite', mu:600},
+    {name:'Inductor de banco a 60 Hz con núcleo ferromagnético', volt:6, curr:0.6, freq:60, dcore:28, lwind:45, awg:'20', core:'ferro', mu:150},
+    {name:'Bobina de aire para resonancia de alta frecuencia', volt:3, curr:0.15, freq:15000, dcore:12, lwind:20, awg:'28', core:'air', mu:1}
+  ];
+  let exampleIdx = 0;
+
+  $('exampleBtn').addEventListener('click', ()=>{
+    const ex = EXAMPLES[exampleIdx % EXAMPLES.length];
+    exampleIdx++;
+    voltEl.value=ex.volt; currEl.value=ex.curr; freqEl.value=ex.freq;
+    dcoreEl.value=ex.dcore; lwindEl.value=ex.lwind; awgEl.value=ex.awg;
+    coreEl.value=ex.core; muEl.value=ex.mu;
+    muField.style.display = ex.core==='air' ? 'none' : 'block';
+    updateAwgReadout();
+    $('exampleLabel').textContent = 'Ejemplo ' + (((exampleIdx-1)%EXAMPLES.length)+1) + ' de ' + EXAMPLES.length + ': ' + ex.name;
+    calc();
+  });
+
+  // ---------- geometry / physics ----------
+  function layerGeometry(N, d_w, L_wind_mm){
+    const N_layer = Math.max(1, Math.floor(L_wind_mm / d_w));
+    const n_layers = Math.max(1, Math.ceil(N / N_layer));
+    const N_last = N - (n_layers-1)*N_layer;
+    return {N_layer, n_layers, N_last};
+  }
+
+  // Wheeler's approximate multilayer-solenoid formula, inches in / uH out
+  function inductanceUH(N, d_w, D_core_mm, L_wind_mm, mu_r){
+    const g = layerGeometry(N, d_w, L_wind_mm);
+    const c_mm = g.n_layers * d_w;                 // radial build
+    const a_mm = D_core_mm/2 + c_mm/2;              // mean radius
+    const b_mm = Math.min(L_wind_mm, g.N_layer*d_w); // axial length used
+    const a=a_mm/25.4, b=b_mm/25.4, c=c_mm/25.4;
+    const denom = 6*a + 9*b + 10*c;
+    if(denom<=0) return 0;
+    let L = 0.8 * a*a * N*N / denom;
+    if(mu_r && mu_r>1) L *= mu_r;
+    return L;
+  }
+
+  function findN(target_L_H, d_w, D_core_mm, L_wind_mm, mu_r){
+    const target_uH = target_L_H*1e6;
+    let prevL=0;
+    for(let N=1;N<=MAX_N;N++){
+      const L = inductanceUH(N, d_w, D_core_mm, L_wind_mm, mu_r);
+      if(L>=target_uH){
+        if(N>1){
+          const dN=Math.abs(L-target_uH), dP=Math.abs(prevL-target_uH);
+          return dP<dN ? N-1 : N;
+        }
+        return N;
+      }
+      prevL=L;
+    }
+    return null; // did not converge inside MAX_N
+  }
+
+  function wireLengthTotal_m(N, d_w, D_core_mm, L_wind_mm){
+    const g = layerGeometry(N, d_w, L_wind_mm);
+    let total_mm = 0;
+    for(let k=1;k<=g.n_layers;k++){
+      const turns = (k<g.n_layers) ? g.N_layer : g.N_last;
+      const D_k = D_core_mm + d_w*(2*k-1); // mean diameter of layer k
+      total_mm += turns * Math.PI * D_k;
+    }
+    return total_mm/1000;
+  }
+
+  function fmt(n, dec){ if(n===null||n===undefined||!isFinite(n)) return '—'; return n.toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+
+  function chooseInductanceUnit(L_H){
+    if(L_H>=1) return {v:L_H, u:'H'};
+    if(L_H>=1e-3) return {v:L_H*1e3, u:'mH'};
+    return {v:L_H*1e6, u:'µH'};
+  }
+
+  // ---------- main calc ----------
+  function calc(){
+    const V=parseFloat(voltEl.value), I=parseFloat(currEl.value), f=parseFloat(freqEl.value);
+    const D_core=parseFloat(dcoreEl.value), L_wind=parseFloat(lwindEl.value);
+    const gauge=awgEl.value, d_bare=AWG[gauge].bare, d_w=AWG[gauge].ins, area=AWG[gauge].area;
+    const coreType=coreEl.value;
+    const mu_r = coreType==='air' ? 1 : parseFloat(muEl.value)||1;
+
+    if(!(V>0)||!(I>0)||!(f>0)||!(D_core>0)||!(L_wind>0)){
+      resultsEl.innerHTML = '<p style="color:var(--red)">Completa todos los datos con valores mayores que cero para ver el cálculo.</p>';
+      return;
+    }
+    if(d_w > L_wind){
+      resultsEl.innerHTML = '<p style="color:var(--red)">El diámetro del alambre (con esmalte ≈ '+d_w.toFixed(3)+' mm) es mayor que la longitud disponible para el devanado ('+L_wind+' mm). No cabe ni una espira: aumenta la longitud disponible o usa un calibre más delgado.</p>';
+      return;
+    }
+
+    // electrical
+    const X_L = V / I;
+    const L_req_H = X_L / (2*Math.PI*f);
+
+    // winding search
+    const N = findN(L_req_H, d_w, D_core, L_wind, mu_r);
+    const cappedResult = (N===null);
+    const N_final = cappedResult ? MAX_N : N;
+    const g = layerGeometry(N_final, d_w, L_wind);
+    const L_est_H = inductanceUH(N_final, d_w, D_core, L_wind, mu_r)/1e6;
+    const wireLen_m = wireLengthTotal_m(N_final, d_w, D_core, L_wind);
+    const R = RHO * wireLen_m / area;
+    const Z = Math.sqrt(R*R + X_L*X_L);
+    const S = V*I;
+    const Q = I*I*X_L;
+    const Pcu = I*I*R;
+    const outerD = D_core + 2*g.n_layers*d_w;
+    const usedLength = Math.min(L_wind, g.N_layer*d_w);
+    const maxCurrentGauge = area * J_MAX;
+
+    // ---------- viability ----------
+    const turnsRisk = N_final<=300 ? 0 : N_final<=1000 ? 1 : 2;
+    const layersRisk = g.n_layers<=3 ? 0 : g.n_layers<=8 ? 1 : 2;
+    const wireRisk = wireLen_m<=50 ? 0 : wireLen_m<=150 ? 1 : 2;
+    const convergeRisk = cappedResult ? 2 : 0;
+    const currentRisk = I> maxCurrentGauge*2 ? 2 : I>maxCurrentGauge ? 1 : 0;
+    const risk = Math.max(turnsRisk, layersRisk, wireRisk, convergeRisk, currentRisk);
+
+    let level, flagText, message;
+    if(risk>=2){
+      level='rojo'; flagText='ROJO — diseño poco práctico';
+      message = cappedResult
+        ? 'La inductancia requerida ('+fmt(L_req_H*1000,2)+' mH) es demasiado alta para estas dimensiones: ni con '+MAX_N.toLocaleString('es-CO')+' espiras se alcanza. El resultado matemático no representa una recomendación práctica de fabricación.'
+        : 'La combinación de espiras, capas y longitud de alambre que exige esta inductancia no es razonable para una práctica artesanal. El cálculo es matemáticamente correcto, pero no se recomienda intentar bobinarlo así.';
+    } else if(risk===1){
+      level='amarillo'; flagText='AMARILLO — diseño exigente';
+      message = 'La cantidad de espiras y/o capas es alta. La bobina puede ser laboriosa o difícil de fabricar a mano con precisión. Es viable, pero considera las alternativas de abajo antes de empezar a enrollar.';
+    } else {
+      level='verde'; flagText='VERDE — diseño razonable';
+      message = 'La cantidad de espiras y capas es razonable para una práctica de laboratorio con materiales artesanales.';
+    }
+
+    // ---------- suggestions ----------
+    const sug = [];
+    if(convergeRisk||turnsRisk===2){
+      sug.push('Usar un núcleo ferromagnético o de ferrita: al aumentar μr efectivo, la misma inductancia se logra con muchas menos espiras.');
+      sug.push('Revisar si el punto de operación (V, I, f) es el correcto — reducir la reactancia objetivo (más corriente, menos voltaje o menor frecuencia) baja directamente la inductancia requerida.');
+    }
+    if(layersRisk>=1){
+      sug.push('Aumentar el diámetro de la tubería o la longitud disponible del devanado: un radio medio mayor produce más inductancia por espira, reduciendo el número de capas necesarias.');
+    }
+    if(wireRisk>=1){
+      sug.push('Con más capas, cada vuelta es más larga y cara: si el diseño lo permite, prioriza aumentar dimensiones antes que multiplicar capas.');
+    }
+    if(currentRisk>=1){
+      sug.push('La corriente objetivo es alta para el calibre AWG '+gauge+' (máximo orientativo ≈ '+fmt(maxCurrentGauge,2)+' A). Usa un calibre más grueso (número AWG menor) para evitar calentamiento excesivo.');
+    }
+    if(sug.length===0){
+      sug.push('El diseño actual no necesita ajustes para ser viable en el laboratorio. Aun así, deja margen de alambre y mide la bobina terminada para comparar con el estimado.');
+    }
+
+    // ---------- manufacturing guide ----------
+    // Fixed, short list of practical steps (does not grow with the number of layers).
+    const steps = [];
+    steps.push('Corta aproximadamente <b>'+fmt(wireLen_m*1.1,2)+' m</b> de alambre esmaltado AWG '+gauge+' (incluye ~10% de margen para sujeción y errores).');
+    steps.push('Fija el extremo inicial a la tubería con cinta, dejando unos 5 cm libres para la futura conexión.');
+    steps.push('Enrolla capa por capa siguiendo la tabla de abajo: en cada capa avanza apretando las espiras una junto a otra hasta llenar los '+fmt(usedLength,1)+' mm marcados, y al llegar al final pasa directo a la siguiente capa sin cortar el alambre, invirtiendo el sentido de avance.');
+    steps.push('Remata el extremo final dejando otros ~5 cm libres y fíjalo con cinta para que el devanado no se afloje.');
+    steps.push('Mide con un multímetro la resistencia del devanado y compárala con el valor estimado (R ≈ '+fmt(R,3)+' Ω). Si tienes LCR-metro, mide también la inductancia real y compárala con el estimado (L ≈ '+chooseInductanceUnit(L_est_H).v.toFixed(2)+' '+chooseInductanceUnit(L_est_H).u+').');
+    if(coreType!=='air'){
+      steps.push('Inserta el núcleo dentro de la tubería y vuelve a medir la inductancia: el valor real puede diferir bastante del estimado, porque μr efectivo depende de la geometría real del núcleo.');
+    }
+
+    // Compact layer-by-layer table instead of one step per layer — practical even with many layers.
+    let layerRows = '';
+    for(let k=1;k<=g.n_layers;k++){
+      const turns = (k<g.n_layers)?g.N_layer:g.N_last;
+      const dir = (k%2===1)?'→ izquierda a derecha':'← derecha a izquierda';
+      layerRows += '<tr><td>'+k+'</td><td>'+turns+'</td><td>'+dir+'</td></tr>';
+    }
+
+    // ---------- render ----------
+    const Lreq = chooseInductanceUnit(L_req_H);
+    const Lest = chooseInductanceUnit(L_est_H);
+
+    resultsEl.innerHTML = `
+      <p class="section-title">Cálculo eléctrico</p>
+      <p class="section-sub">A partir de V, I y f.</p>
+      <div class="calc-line"><span class="k">Reactancia inductiva X_L = V / I</span><span class="v">${fmt(X_L,3)} Ω</span></div>
+      <div class="calc-line"><span class="k">Inductancia requerida L = X_L / (2πf)</span><span class="v">${Lreq.v.toFixed(3)} ${Lreq.u}</span></div>
+
+      <div class="banner ${level}">
+        <span class="flag">${flagText}</span>
+        ${message}
+      </div>
+
+      <p class="section-title">Devanado propuesto</p>
+      <p class="section-sub">Búsqueda iterativa sobre una bobina cilíndrica multicapa (aproximación de Wheeler).</p>
+
+      <div class="metrics-grid">
+        <div class="metric"><div class="label">espiras totales</div><div class="value">${N_final.toLocaleString('es-CO')}</div></div>
+        <div class="metric"><div class="label">espiras por capa</div><div class="value">${g.N_layer}</div></div>
+        <div class="metric"><div class="label">número de capas</div><div class="value">${g.n_layers}</div></div>
+        <div class="metric"><div class="label">espiras última capa</div><div class="value">${g.N_last}</div></div>
+        <div class="metric"><div class="label">inductancia estimada</div><div class="value">${Lest.v.toFixed(3)}<span class="unit">${Lest.u}</span></div></div>
+        <div class="metric"><div class="label">longitud de alambre</div><div class="value">${fmt(wireLen_m,2)}<span class="unit">m</span></div></div>
+        <div class="metric"><div class="label">resistencia del devanado</div><div class="value">${fmt(R,3)}<span class="unit">Ω</span></div></div>
+        <div class="metric"><div class="label">impedancia aproximada</div><div class="value">${fmt(Z,3)}<span class="unit">Ω</span></div></div>
+        <div class="metric"><div class="label">potencia aparente S</div><div class="value">${fmt(S,3)}<span class="unit">VA</span></div></div>
+        <div class="metric"><div class="label">potencia reactiva Q</div><div class="value">${fmt(Q,3)}<span class="unit">VAR</span></div></div>
+        <div class="metric"><div class="label">pérdidas en cobre P_cu</div><div class="value">${fmt(Pcu,3)}<span class="unit">W</span></div></div>
+        <div class="metric"><div class="label">diámetro exterior final</div><div class="value">${fmt(outerD,2)}<span class="unit">mm</span></div></div>
+      </div>
+
+      <p class="section-title">Alternativas si el diseño es exigente</p>
+      <ul class="suggestions">${sug.map(s=>'<li>'+s+'</li>').join('')}</ul>
+
+      <div class="diagram-wrap">
+        ${buildDiagramSVG(g, D_core, L_wind, usedLength, d_w)}
+        <p class="diagram-caption">corte axial esquemático — no a escala real de espira individual</p>
+      </div>
+
+      <p class="section-title">Guía de fabricación</p>
+      <ol class="steps">${steps.map(s=>'<li>'+s+'</li>').join('')}</ol>
+
+      <p class="layer-table-caption">Marca cada capa a medida que la enrollas:</p>
+      <div class="layer-table-scroll">
+        <table class="spec layer-table">
+          <tr><th>Capa</th><th>Espiras</th><th>Sentido</th></tr>
+          ${layerRows}
+        </table>
+      </div>
+
+      <button class="print-btn" id="printBtn">Imprimir / guardar ficha técnica</button>
+
+      <p class="section-title">Ficha técnica de la bobina</p>
+      <table class="spec">
+        <tr><th>Tensión / corriente / frecuencia</th><td>${V} V · ${I} A · ${f} Hz</td></tr>
+        <tr><th>Reactancia inductiva</th><td>${fmt(X_L,3)} Ω</td></tr>
+        <tr><th>Inductancia requerida</th><td>${Lreq.v.toFixed(3)} ${Lreq.u}</td></tr>
+        <tr><th>Inductancia estimada del devanado</th><td>${Lest.v.toFixed(3)} ${Lest.u}</td></tr>
+        <tr><th>Núcleo</th><td>${coreType==='air'?'Aire (μr = 1)':(coreType==='ferro'?'Ferromagnético':'Ferrita')+' — μr aprox. '+mu_r}</td></tr>
+        <tr><th>Calibre</th><td>AWG ${gauge} · Ø cobre ${d_bare.toFixed(3)} mm · Ø esmaltado ${d_w.toFixed(3)} mm</td></tr>
+        <tr><th>Espiras totales</th><td>${N_final.toLocaleString('es-CO')}</td></tr>
+        <tr><th>Espiras por capa / capas / última capa</th><td>${g.N_layer} / ${g.n_layers} / ${g.N_last}</td></tr>
+        <tr><th>Longitud de alambre</th><td>${fmt(wireLen_m,2)} m</td></tr>
+        <tr><th>Resistencia del devanado</th><td>${fmt(R,3)} Ω</td></tr>
+        <tr><th>Impedancia aproximada</th><td>${fmt(Z,3)} Ω</td></tr>
+        <tr><th>S / Q / P_cu</th><td>${fmt(S,2)} VA / ${fmt(Q,2)} VAR / ${fmt(Pcu,3)} W</td></tr>
+        <tr><th>Diámetro tubería / longitud devanado</th><td>${D_core} mm / ${L_wind} mm</td></tr>
+        <tr><th>Diámetro exterior final</th><td>${fmt(outerD,2)} mm</td></tr>
+        <tr><th>Corriente máx. orientativa para AWG ${gauge}</th><td>≈ ${fmt(maxCurrentGauge,2)} A (a ${J_MAX} A/mm², solo referencia)</td></tr>
+        <tr><th>Estado de viabilidad</th><td>${flagText}</td></tr>
+      </table>
+
+      <p class="caveat">Herramienta educativa para práctica de laboratorio. La inductancia se estima con la fórmula aproximada de Wheeler para solenoides multicapa; el efecto real de núcleos magnéticos depende de su geometría y no de μr por sí solo. Mide siempre la bobina terminada con los instrumentos del laboratorio y usa esos valores, no los estimados, para tu informe.</p>
+    `;
+
+    document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+  }
+
+  function buildDiagramSVG(g, D_core, L_wind, usedLength, d_w){
+    const W=640, H=200;
+    const marginX=40;
+    const scaleX = (W-2*marginX) / Math.max(L_wind, usedLength, 1);
+    const maxRadiusMM = D_core/2 + g.n_layers*d_w;
+    const scaleY = (H*0.38) / Math.max(maxRadiusMM, 1);
+    const cx = W/2, cy = H/2;
+    const coreHalfLenPx = (L_wind*scaleX)/2;
+    const coreHalfHPx = (D_core/2)*scaleY;
+
+    let bands='';
+    for(let k=1; k<=g.n_layers; k++){
+      const innerR = D_core/2 + (k-1)*d_w;
+      const outerR = D_core/2 + k*d_w;
+      const bandHalfLenPx = (usedLength*scaleX)/2;
+      const yTopOuter = cy - outerR*scaleY;
+      const yTopInner = cy - innerR*scaleY;
+      const yBotInner = cy + innerR*scaleY;
+      const yBotOuter = cy + outerR*scaleY;
+      const hBand = Math.max(1, yTopInner - yTopOuter);
+      bands += `<rect x="${cx-bandHalfLenPx}" y="${yTopOuter}" width="${bandHalfLenPx*2}" height="${hBand}" fill="#c9793a" stroke="#8a4c14" stroke-width="0.5" opacity="0.92"/>`;
+      bands += `<rect x="${cx-bandHalfLenPx}" y="${yBotInner}" width="${bandHalfLenPx*2}" height="${hBand}" fill="#c9793a" stroke="#8a4c14" stroke-width="0.5" opacity="0.92"/>`;
+    }
+
+    return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <line x1="${marginX-10}" y1="${cy}" x2="${W-marginX+10}" y2="${cy}" stroke="#c3ccca" stroke-width="1" stroke-dasharray="3 3"/>
+      <rect x="${cx-coreHalfLenPx}" y="${cy-coreHalfHPx}" width="${coreHalfLenPx*2}" height="${coreHalfHPx*2}" fill="#dfe5ea" stroke="#5c6f95" stroke-width="1"/>
+      ${bands}
+      <text x="${marginX-10}" y="${H-14}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#3f5a61">tubería Ø${D_core}mm</text>
+      <text x="${W-marginX-100}" y="${H-14}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#3f5a61">${g.n_layers} capa(s) · ${d_w.toFixed(2)}mm/hilo</text>
+    </svg>`;
+  }
+
+  // initial run
+  calc();
+})();
+</script>
+</body>
+</html>
