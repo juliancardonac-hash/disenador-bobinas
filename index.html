@@ -3,2254 +3,796 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Diseñador Universal de Bobinas</title>
-
+<title>Diseño de bobina — laboratorio de electricidad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-
-:root{
-    --bg:#0b1220;
-    --panel:#121c2e;
-    --panel2:#18263d;
-    --border:#2b3d5c;
-    --text:#edf4ff;
-    --muted:#9eafc8;
-    --blue:#58a6ff;
-    --green:#35d399;
-    --yellow:#f6c453;
-    --red:#fb7185;
-}
-
-*{
-    box-sizing:border-box;
-}
-
-body{
-    margin:0;
-    font-family:Arial,Helvetica,sans-serif;
+  :root{
+    --paper:#eef2f2;
+    --paper-line:#c9d6d9;
+    --ink:#132227;
+    --ink-soft:#3f5a61;
+    --copper:#b5651d;
+    --copper-dark:#8a4c14;
+    --core-tint:#5c6f95;
+    --green:#3f7d52;
+    --green-bg:#e4efe6;
+    --amber:#a8701f;
+    --amber-bg:#f5ead2;
+    --red:#a13c34;
+    --red-bg:#f6e0dd;
+    --panel:#ffffff;
+    --line:#c3ccca;
+    --radius:3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
     background:
-        radial-gradient(circle at top,#172943 0,#0b1220 45%);
-    color:var(--text);
-}
-
-.container{
-    max-width:1450px;
-    margin:auto;
-    padding:25px;
-}
-
-header{
-    margin-bottom:25px;
-}
-
-header h1{
-    margin:0;
-    font-size:32px;
-}
-
-header p{
-    color:var(--muted);
-    margin-top:8px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
-    gap:16px;
-}
-
-.card{
-    grid-column:span 6;
-    background:rgba(18,28,46,.95);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:20px;
-    box-shadow:0 12px 30px rgba(0,0,0,.25);
-}
-
-.full{
-    grid-column:span 12;
-}
-
-.third{
-    grid-column:span 4;
-}
-
-h2{
-    margin-top:0;
-    font-size:19px;
-}
-
-.form{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:13px;
-}
-
-label{
-    display:block;
-    color:#cbd8ea;
-    font-size:12px;
-    margin-bottom:5px;
-}
-
-input,
-select{
-    width:100%;
-    padding:11px;
-    border-radius:9px;
-    border:1px solid var(--border);
-    background:#0c1627;
-    color:white;
-    outline:none;
-}
-
-input:focus,
-select:focus{
-    border-color:var(--blue);
-}
-
-.unit{
-    display:flex;
-}
-
-.unit input{
-    border-radius:9px 0 0 9px;
-}
-
-.unit span{
-    min-width:55px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#243650;
-    border:1px solid var(--border);
-    border-left:0;
-    border-radius:0 9px 9px 0;
-    font-size:12px;
-    color:#c2d0e4;
-}
-
-button{
-    padding:12px 17px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.primary{
-    background:var(--blue);
-    color:#07101d;
-}
-
-.secondary{
-    background:#293b59;
-    color:white;
-}
-
-.danger{
-    background:#572738;
-    color:#ffe8ed;
-}
-
-.actions{
-    display:flex;
-    gap:10px;
-    margin-top:18px;
-    flex-wrap:wrap;
-}
-
-.note{
-    color:var(--muted);
-    font-size:12px;
+      repeating-linear-gradient(0deg, transparent, transparent 27px, var(--paper-line) 27px, var(--paper-line) 28px),
+      repeating-linear-gradient(90deg, transparent, transparent 27px, var(--paper-line) 27px, var(--paper-line) 28px),
+      var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
     line-height:1.5;
-}
+    padding:0 0 80px 0;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
 
-.status{
-    padding:15px;
-    border-radius:12px;
-    margin-bottom:15px;
-}
+  header.top{
+    border-bottom:2px solid var(--ink);
+    background:var(--paper);
+    padding:36px 0 22px 0;
+  }
+  header.top .wrap{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px;}
+  h1{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:2.35rem;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin:0 0 6px 0;
+  }
+  .subtitle{
+    max-width:520px;
+    color:var(--ink-soft);
+    font-size:0.98rem;
+    margin-top:6px;
+  }
+  .lab-meta{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    color:var(--ink-soft);
+    text-align:right;
+    line-height:1.7;
+  }
 
-.ok{
-    background:#0d3027;
-    border:1px solid #247c62;
-}
+  main.layout{
+    display:block;
+    border-left:2px solid var(--ink);
+    border-right:2px solid var(--ink);
+    max-width:820px;
+    margin:0 auto;
+    background:var(--panel);
+  }
 
-.warning{
-    background:#332b14;
-    border:1px solid #876b1c;
-}
-
-.bad{
-    background:#351722;
-    border:1px solid #96384f;
-}
-
-.metrics{
+  .panel-form{
+    border-bottom:2px solid var(--ink);
+    padding:28px 26px 32px 26px;
+  }
+  .form-grid{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:1fr 1fr;
+    gap:0 32px;
+  }
+  @media (max-width:640px){ .form-grid{grid-template-columns:1fr;} }
+
+  .form-actions{
+    display:flex;
     gap:10px;
-}
+    margin-top:6px;
+    grid-column:1 / -1;
+  }
+  .form-actions button{flex:1;}
 
-.metric{
-    background:#0b1525;
-    border:1px solid var(--border);
-    padding:13px;
-    border-radius:11px;
-}
+  .panel-results{padding:28px 30px 40px 30px;}
 
-.metric-title{
-    color:var(--muted);
-    font-size:11px;
-}
+  fieldset{
+    border:none;
+    padding:0;
+    margin:0 0 26px 0;
+  }
+  legend{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    padding:0 0 8px 0;
+    border-bottom:1px solid var(--line);
+    width:100%;
+    margin-bottom:14px;
+    text-transform:lowercase;
+  }
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;
+    font-size:0.86rem;
+    color:var(--ink);
+    margin-bottom:4px;
+  }
+  .field .hint{
+    display:block;
+    font-size:0.74rem;
+    color:var(--ink-soft);
+    margin-top:3px;
+  }
+  input[type=number], select{
+    width:100%;
+    padding:8px 10px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:#fbfcfb;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.92rem;
+    color:var(--ink);
+  }
+  input[type=number]:focus, select:focus{
+    outline:2px solid var(--copper);
+    outline-offset:1px;
+    border-color:var(--copper);
+  }
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
 
-.metric-value{
-    font-size:20px;
-    font-weight:bold;
-    margin-top:5px;
-}
+  .awg-readout{
+    margin-top:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--copper-dark);
+    background:#fbf3ea;
+    border:1px dashed var(--copper);
+    padding:6px 9px;
+    border-radius:var(--radius);
+  }
 
-table{
+  .core-note{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    background:#eef1fb;
+    border-left:3px solid var(--core-tint);
+    padding:8px 10px;
+    margin-top:8px;
+    border-radius:0 var(--radius) var(--radius) 0;
+  }
+
+  button.calc{
+    width:100%;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    padding:12px 14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.88rem;
+    letter-spacing:0.02em;
+    border-radius:var(--radius);
+    cursor:pointer;
+    margin-top:6px;
+  }
+  button.calc:hover{background:var(--copper-dark);}
+  button.calc:focus-visible{outline:3px solid var(--copper); outline-offset:2px;}
+  button.calc.secondary{
+    background:none;
+    border:1px solid var(--ink);
+    color:var(--ink);
+  }
+  button.calc.secondary:hover{background:var(--ink); color:#fff;}
+  .example-label{
+    font-size:0.78rem;
+    color:var(--copper-dark);
+    font-family:'IBM Plex Mono', monospace;
+    margin:8px 0 0 0;
+    min-height:1.2em;
+  }
+
+  /* results */
+  .section-title{
+    font-family:'Source Serif 4', serif;
+    font-size:1.3rem;
+    font-weight:600;
+    margin:0 0 4px 0;
+  }
+  .section-sub{color:var(--ink-soft); font-size:0.85rem; margin-bottom:16px;}
+
+  .calc-line{
+    display:flex; justify-content:space-between; gap:10px;
+    padding:6px 0;
+    border-bottom:1px dotted var(--line);
+    font-size:0.9rem;
+  }
+  .calc-line .k{color:var(--ink-soft);}
+  .calc-line .v{font-family:'IBM Plex Mono', monospace; font-weight:500;}
+
+  .metrics-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(190px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin:18px 0 26px 0;
+  }
+  .metric{
+    background:var(--panel);
+    padding:14px 14px 12px 14px;
+  }
+  .metric .label{font-size:0.72rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace;}
+  .metric .value{font-family:'IBM Plex Mono', monospace; font-size:1.28rem; font-weight:600; margin-top:4px;}
+  .metric .value .unit{font-size:0.78rem; font-weight:400; color:var(--ink-soft); margin-left:2px;}
+
+  .banner{
+    border:1px solid; border-radius:var(--radius);
+    padding:14px 16px;
+    margin:6px 0 24px 0;
+    font-size:0.92rem;
+  }
+  .banner .flag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.74rem;
+    font-weight:600;
+    margin-bottom:6px;
+    display:block;
+  }
+  .banner.verde{background:var(--green-bg); border-color:var(--green); color:#204a2c;}
+  .banner.verde .flag{color:var(--green);}
+  .banner.amarillo{background:var(--amber-bg); border-color:var(--amber); color:#5c3f0f;}
+  .banner.amarillo .flag{color:var(--amber);}
+  .banner.rojo{background:var(--red-bg); border-color:var(--red); color:#5e211c;}
+  .banner.rojo .flag{color:var(--red);}
+
+  .suggestions{margin:0 0 26px 0; padding:0;}
+  .suggestions li{margin-bottom:7px; font-size:0.9rem;}
+
+  .diagram-wrap{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px;
+    margin-bottom:26px;
+    background:#fbfcfb;
+  }
+  .diagram-wrap svg{width:100%; height:auto; display:block;}
+  .diagram-caption{font-size:0.76rem; color:var(--ink-soft); margin-top:8px; font-family:'IBM Plex Mono', monospace;}
+
+  ol.steps{padding-left:22px; margin:0 0 26px 0;}
+  ol.steps li{margin-bottom:10px; font-size:0.92rem;}
+  ol.steps li b{color:var(--copper-dark);}
+
+  table.spec{
     width:100%;
     border-collapse:collapse;
-}
-
-th,
-td{
-    padding:9px;
-    border-bottom:1px solid var(--border);
-}
-
-th{
-    color:#b9c9df;
-    font-size:12px;
+    margin-bottom:10px;
+    font-size:0.88rem;
+  }
+  table.spec th, table.spec td{
     text-align:left;
-}
+    padding:7px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  table.spec th{
+    width:56%;
+    font-weight:400;
+    color:var(--ink-soft);
+  }
+  table.spec td{font-family:'IBM Plex Mono', monospace;}
 
-td:last-child{
-    text-align:right;
-    font-weight:bold;
-}
+  .layer-table-caption{
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    margin:0 0 6px 0;
+  }
+  .layer-table-scroll{
+    max-height:260px;
+    overflow-y:auto;
+    border:1px solid var(--line);
+    margin-bottom:22px;
+  }
+  table.layer-table{margin-bottom:0;}
+  table.layer-table th{
+    width:auto;
+    background:#f3f5f4;
+    position:sticky;
+    top:0;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.74rem;
+  }
+  table.layer-table td{font-size:0.86rem;}
 
-.formula{
-    background:#091321;
-    padding:10px;
-    border-radius:8px;
-    margin:7px 0;
-    font-family:monospace;
-    color:#dbe9ff;
-}
+  .print-btn{
+    background:none;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    padding:8px 12px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    margin-bottom:20px;
+  }
+  .print-btn:hover{background:var(--ink); color:#fff;}
 
-canvas{
-    width:100%;
-    height:320px;
-    background:#08111f;
-    border:1px solid var(--border);
-    border-radius:12px;
-}
+  .caveat{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    border-top:1px solid var(--line);
+    padding-top:14px;
+    margin-top:6px;
+  }
 
-.badge{
-    display:inline-block;
-    padding:5px 9px;
-    border-radius:20px;
-    font-size:11px;
-    background:#243650;
-    margin:3px;
-}
-
-@media(max-width:950px){
-
-    .card,
-    .third,
-    .full{
-        grid-column:span 12;
-    }
-
-    .metrics{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-}
-
-@media(max-width:600px){
-
-    .container{
-        padding:12px;
-    }
-
-    .form{
-        grid-template-columns:1fr;
-    }
-
-    .metrics{
-        grid-template-columns:1fr;
-    }
-
-    header h1{
-        font-size:25px;
-    }
-
-}
-
+  @media print{
+    body{background:#fff;}
+    header.top, .panel-form, .print-btn, .diagram-wrap{display:none !important;}
+    main.layout{border:none; max-width:none;}
+  }
 </style>
 </head>
-
-
 <body>
 
-<div class="container">
-
-<header>
-
-<h1>⚡ Diseñador Universal de Bobinas</h1>
-
-<p>
-Herramienta general para diseño, cálculo y verificación preliminar
-de bobinas e inductores.
-</p>
-
+<header class="top">
+  <div class="wrap">
+    <div>
+      <p class="kicker">laboratorio de electricidad — práctica de bobinas</p>
+      <h1>Cuaderno de diseño de bobina</h1>
+      <p class="subtitle">Introduce lo que sabes del circuito y de la tubería disponible. La herramienta calcula una bobina cilíndrica multicapa razonable para fabricar a mano, y te avisa si el resultado matemático no es práctico de bobinar.</p>
+    </div>
+    <div class="lab-meta">
+      modelo: solenoide multicapa<br>
+      método: Wheeler (aprox.)<br>
+      cobre a 20 °C
+    </div>
+  </div>
 </header>
 
-
-<div class="grid">
-
-
-<!-- ================================================= -->
-<!-- DATOS ELECTRICOS -->
-<!-- ================================================= -->
-
-<section class="card">
-
-<h2>1. Datos eléctricos</h2>
-
-<div class="form">
-
-<div>
-<label>Modo de cálculo</label>
-
-<select id="modo">
-
-<option value="diseno">
-Diseñar desde cero
-</option>
-
-<option value="inductancia">
-Calcular inductancia
-</option>
-
-<option value="espiras">
-Calcular espiras
-</option>
-
-<option value="verificar">
-Verificar bobina existente
-</option>
-
-</select>
-
-</div>
-
-
-<div>
-
-<label>Tipo de excitación</label>
-
-<select id="tipo">
-
-<option value="AC">AC</option>
-
-<option value="DC">DC</option>
-
-<option value="ACDC">AC + DC</option>
-
-</select>
-
-</div>
-
-
-<div>
-
-<label>Voltaje</label>
-
-<div class="unit">
-
-<input id="voltaje" type="number" value="120">
-
-<span>V</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Corriente</label>
-
-<div class="unit">
-
-<input id="corriente" type="number" value="1">
-
-<span>A</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Frecuencia</label>
-
-<div class="unit">
-
-<input id="frecuencia" type="number" value="60">
-
-<span>Hz</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Inductancia objetivo</label>
-
-<div class="unit">
-
-<input id="inductancia" type="number" value="318">
-
-<span>mH</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Corriente DC</label>
-
-<div class="unit">
-
-<input id="corrienteDC" type="number" value="0">
-
-<span>A</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Factor de cresta</label>
-
-<div class="unit">
-
-<input id="factorCresta" type="number" value="1.414">
-
-<span>—</span>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- ================================================= -->
-<!-- NUCLEO -->
-<!-- ================================================= -->
-
-<section class="card">
-
-<h2>2. Núcleo magnético</h2>
-
-<div class="form">
-
-
-<div>
-
-<label>Tipo de núcleo</label>
-
-<select id="tipoNucleo">
-
-<option>Aire</option>
-<option>EI</option>
-<option>EE</option>
-<option>ETD</option>
-<option>Toroidal</option>
-<option>Ferrita</option>
-<option>Polvo de hierro</option>
-<option>Otro</option>
-
-</select>
-
-</div>
-
-
-<div>
-
-<label>Permeabilidad relativa μr</label>
-
-<div class="unit">
-
-<input id="mur" type="number" value="2500">
-
-<span>—</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Área efectiva Ae</label>
-
-<div class="unit">
-
-<input id="Ae" type="number" value="10">
-
-<span>cm²</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Área de ventana Aw</label>
-
-<div class="unit">
-
-<input id="Aw" type="number" value="14">
-
-<span>cm²</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Longitud magnética le</label>
-
-<div class="unit">
-
-<input id="le" type="number" value="10">
-
-<span>cm</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Entrehierro total</label>
-
-<div class="unit">
-
-<input id="entrehierro" type="number" value="0.5">
-
-<span>mm</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Densidad de flujo Bmax</label>
-
-<div class="unit">
-
-<input id="Bmax" type="number" value="0.8">
-
-<span>T</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Margen de diseño</label>
-
-<div class="unit">
-
-<input id="margenB" type="number" value="0.85">
-
-<span>—</span>
-
-</div>
-
-</div>
-
-</div>
-
-<p class="note">
-
-Ae, Aw y le deben obtenerse preferiblemente de la ficha técnica
-del núcleo o de mediciones físicas.
-
-</p>
-
-</section>
-
-
-<!-- ================================================= -->
-<!-- CONDUCTOR -->
-<!-- ================================================= -->
-
-<section class="card">
-
-<h2>3. Conductor y devanado</h2>
-
-<div class="form">
-
-
-<div>
-
-<label>Material</label>
-
-<select id="material">
-
-<option value="cobre">Cobre</option>
-<option value="aluminio">Aluminio</option>
-
-</select>
-
-</div>
-
-
-<div>
-
-<label>Método de selección</label>
-
-<select id="modoCable">
-
-<option value="auto">
-Automático
-</option>
-
-<option value="awg">
-Introducir AWG
-</option>
-
-<option value="area">
-Introducir área
-</option>
-
-</select>
-
-</div>
-
-
-<div>
-
-<label>AWG</label>
-
-<div class="unit">
-
-<input id="awg" type="number" value="21">
-
-<span>AWG</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Área de cobre</label>
-
-<div class="unit">
-
-<input id="areaCable" type="number" value="0.410">
-
-<span>mm²</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Densidad de corriente J</label>
-
-<div class="unit">
-
-<input id="densidad" type="number" value="3">
-
-<span>A/mm²</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Diámetro exterior</label>
-
-<div class="unit">
-
-<input id="diametroExterior" type="number" value="0.78">
-
-<span>mm</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Factor de llenado máximo</label>
-
-<div class="unit">
-
-<input id="factorLlenado" type="number" value="0.65">
-
-<span>—</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Separación entre capas</label>
-
-<div class="unit">
-
-<input id="separacionCapas" type="number" value="0">
-
-<span>mm</span>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- ================================================= -->
-<!-- GEOMETRIA -->
-<!-- ================================================= -->
-
-<section class="card">
-
-<h2>4. Geometría del devanado</h2>
-
-<div class="form">
-
-
-<div>
-
-<label>Ancho útil de bobinado</label>
-
-<div class="unit">
-
-<input id="anchoVentana" type="number" value="40">
-
-<span>mm</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Altura útil</label>
-
-<div class="unit">
-
-<input id="alturaVentana" type="number" value="35">
-
-<span>mm</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Diámetro medio inicial</label>
-
-<div class="unit">
-
-<input id="diametroMedio" type="number" value="45">
-
-<span>mm</span>
-
-</div>
-
-</div>
-
-
-<div>
-
-<label>Margen mecánico</label>
-
-<div class="unit">
-
-<input id="margenMecanico" type="number" value="1">
-
-<span>mm</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="actions">
-
-<button class="primary" onclick="calcular()">
-⚡ CALCULAR DISEÑO
-</button>
-
-<button class="secondary" onclick="ejemplo()">
-Cargar ejemplo
-</button>
-
-<button class="danger" onclick="limpiar()">
-Restablecer
-</button>
-
-</div>
-
-</section>
-
-
-<!-- ================================================= -->
-<!-- RESULTADOS -->
-<!-- ================================================= -->
-
-<section class="card full">
-
-<h2>📊 Resultado general</h2>
-
-<div id="estado" class="status warning">
-
-Pulsa "Calcular diseño" para comenzar.
-
-</div>
-
-<div id="metricas" class="metrics"></div>
-
-</section>
-
-
-<!-- ================================================= -->
-<!-- RESULTADOS MAGNETICOS -->
-<!-- ================================================= -->
-
-<section class="card third">
-
-<h2>🧲 Parte magnética</h2>
-
-<div id="resultadoMagnetico"></div>
-
-</section>
-
-
-<!-- ================================================= -->
-<!-- RESULTADOS DEVANADO -->
-<!-- ================================================= -->
-
-<section class="card third">
-
-<h2>🧵 Devanado</h2>
-
-<div id="resultadoDevanado"></div>
-
-</section>
-
-
-<!-- ================================================= -->
-<!-- RESULTADOS ELECTRICOS -->
-<!-- ================================================= -->
-
-<section class="card third">
-
-<h2>⚡ Parte eléctrica</h2>
-
-<div id="resultadoElectrico"></div>
-
-</section>
-
-
-<!-- ================================================= -->
-<!-- GRAFICA -->
-<!-- ================================================= -->
-
-<section class="card full">
-
-<h2>📐 Representación conceptual</h2>
-
-<canvas id="grafico" width="1200" height="320"></canvas>
-
-<p class="note">
-
-La representación es conceptual. Para fabricación real deben
-considerarse tolerancias, aislamiento, forma exacta del carrete,
-geometría del núcleo y ficha técnica del material magnético.
-
-</p>
-
-</section>
-
-
-<!-- ================================================= -->
-<!-- FORMULAS -->
-<!-- ================================================= -->
-
-<section class="card full">
-
-<h2>📘 Fórmulas utilizadas</h2>
-
-
-<div class="formula">
-Xₗ = 2πfL
-</div>
-
-<div class="formula">
-L ≈ N² / ℜ
-</div>
-
-<div class="formula">
-ℜ = le/(μ₀ μr Ae) + lg/(μ₀ Ae)
-</div>
-
-<div class="formula">
-N = V / (4.44 · f · Ae · Bmax)
-</div>
-
-<div class="formula">
-Acu = I / J
-</div>
-
-<div class="formula">
-d = √(4A / π)
-</div>
-
-<div class="formula">
-R = ρ · l / A
-</div>
-
-<div class="formula">
-Z = √(R² + Xₗ²)
-</div>
-
-<div class="formula">
-Pcu = I²R
-</div>
-
-<div class="formula">
-S = VI
-</div>
-
-<div class="formula">
-Q = I²Xₗ
-</div>
-
-<div class="formula">
-FP = R / |Z|
-</div>
-
-
-<p class="note">
-
-Estas ecuaciones constituyen un modelo preliminar de ingeniería.
-Un diseño destinado a fabricación debe comprobar pérdidas del núcleo,
-curva B-H, temperatura, aislamiento, efecto pelicular,
-efecto de proximidad, dispersión de flujo y tolerancias.
-
-</p>
-
-</section>
-
-</div>
-
+<div class="wrap" style="padding-top:0;">
+<main class="layout">
+
+  <section class="panel-form">
+    <div class="form-grid">
+    <fieldset>
+      <legend>datos eléctricos</legend>
+      <div class="field">
+        <label for="volt">Voltaje RMS (V)</label>
+        <input type="number" id="volt" value="12" min="0" step="0.1">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="curr">Corriente objetivo (A)</label>
+          <input type="number" id="curr" value="0.5" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label for="freq">Frecuencia (Hz)</label>
+          <input type="number" id="freq" value="60" min="0" step="1">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>datos físicos de la tubería</legend>
+      <div class="field">
+        <label for="dcore">Diámetro interior de la tubería (mm)</label>
+        <input type="number" id="dcore" value="20" min="0.1" step="0.1">
+      </div>
+      <div class="field">
+        <label for="lwind">Longitud disponible para el devanado (mm)</label>
+        <input type="number" id="lwind" value="40" min="0.1" step="0.1">
+      </div>
+      <div class="field">
+        <label for="awg">Calibre del conductor (AWG)</label>
+        <select id="awg"></select>
+        <div class="awg-readout" id="awgReadout"></div>
+      </div>
+    </fieldset>
+
+    <fieldset style="grid-column:1 / -1;">
+      <legend>núcleo</legend>
+      <div class="field">
+        <label for="core">Tipo de núcleo</label>
+        <select id="core">
+          <option value="air">Aire (μr = 1)</option>
+          <option value="ferro">Ferromagnético</option>
+          <option value="ferrite">Ferrita</option>
+        </select>
+      </div>
+      <div class="field" id="muField" style="display:none;">
+        <label for="mu">Permeabilidad relativa aproximada μr</label>
+        <input type="number" id="mu" value="100" min="1" step="1">
+        <span class="hint">Valor aproximado del fabricante o de catálogo.</span>
+      </div>
+      <div class="core-note">
+        Para núcleos reales (varilla, no toroide), la permeabilidad efectiva suele ser mucho menor que la μr del material, por el entrehierro que representa el aire alrededor de la varilla. Trata este cálculo como una estimación educativa, no como un valor garantizado — mide la bobina terminada con un LCR-metro.
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button class="calc" id="calcBtn">Calcular bobina</button>
+      <button class="calc secondary" id="exampleBtn">Cargar ejemplo viable</button>
+      <button class="calc secondary" id="clearBtn">Limpiar</button>
+    </div>
+    <p class="example-label" id="exampleLabel"></p>
+    </div>
+  </section>
+
+  <section class="panel-results" id="results">
+    <!-- filled by JS -->
+  </section>
+
+</main>
 </div>
-
 
 <script>
+(function(){
 
-/* =====================================================
-   CONSTANTES
-===================================================== */
+  // ---------- data ----------
+  const AWG = {
+    12:{bare:2.053}, 13:{bare:1.828}, 14:{bare:1.628}, 15:{bare:1.450}, 16:{bare:1.291},
+    17:{bare:1.150}, 18:{bare:1.024}, 19:{bare:0.912}, 20:{bare:0.812}, 21:{bare:0.723},
+    22:{bare:0.644}, 23:{bare:0.573}, 24:{bare:0.511}, 25:{bare:0.455}, 26:{bare:0.405},
+    27:{bare:0.361}, 28:{bare:0.321}, 29:{bare:0.286}, 30:{bare:0.255}
+  };
+  Object.keys(AWG).forEach(g=>{
+    AWG[g].ins = AWG[g].bare * 1.08;             // approx. enamel build
+    AWG[g].area = Math.PI * Math.pow(AWG[g].bare/2, 2); // mm^2
+  });
+  const RHO = 0.0175;      // ohm*mm^2/m, copper at 20C
+  const J_MAX = 4;         // A/mm^2, rough natural-convection guideline
+  const MAX_N = 200000;
 
-const MU0 = 4 * Math.PI * 1e-7;
+  // ---------- dom refs ----------
+  const $ = id => document.getElementById(id);
+  const voltEl=$('volt'), currEl=$('curr'), freqEl=$('freq');
+  const dcoreEl=$('dcore'), lwindEl=$('lwind'), awgEl=$('awg');
+  const coreEl=$('core'), muEl=$('mu'), muField=$('muField');
+  const resultsEl=$('results');
 
+  Object.keys(AWG).forEach(g=>{
+    const opt=document.createElement('option');
+    opt.value=g; opt.textContent='AWG '+g;
+    if(g==='20') opt.selected=true;
+    awgEl.appendChild(opt);
+  });
 
-/* =====================================================
-   TABLA AWG
-===================================================== */
+  function updateAwgReadout(){
+    const g=awgEl.value, d=AWG[g];
+    $('awgReadout').textContent = 'AWG seleccionado: AWG '+g+'  ·  diámetro de cobre ≈ '+d.bare.toFixed(3)+' mm  ·  con esmalte ≈ '+d.ins.toFixed(3)+' mm';
+  }
+  updateAwgReadout();
+  awgEl.addEventListener('change', ()=>{updateAwgReadout(); calc();});
 
-const AWG = {
+  coreEl.addEventListener('change', ()=>{
+    muField.style.display = coreEl.value==='air' ? 'none' : 'block';
+    if(coreEl.value==='ferro') muEl.value=100;
+    if(coreEl.value==='ferrite') muEl.value=800;
+    calc();
+  });
 
-10:5.261,
-11:4.168,
-12:3.309,
-13:2.624,
-14:2.081,
-15:1.650,
-16:1.307,
-17:1.038,
-18:0.823,
-19:0.653,
-20:0.519,
-21:0.410,
-22:0.326,
-23:0.258,
-24:0.205,
-25:0.162,
-26:0.129,
-27:0.102,
-28:0.0810,
-29:0.0642,
-30:0.0509,
-31:0.0404,
-32:0.0320,
-33:0.0254,
-34:0.0201,
-35:0.0160,
-36:0.0127,
-37:0.0100,
-38:0.0080,
-39:0.0063,
-40:0.0050
+  [voltEl,currEl,freqEl,dcoreEl,lwindEl,muEl].forEach(el=>{
+    el.addEventListener('input', debounce(calc, 250));
+  });
+  $('calcBtn').addEventListener('click', calc);
 
-};
+  function debounce(fn,ms){let t; return (...a)=>{clearTimeout(t); t=setTimeout(()=>fn(...a),ms);};}
 
+  // ---------- default values (used by "Limpiar") ----------
+  const DEFAULTS = {volt:12, curr:0.5, freq:60, dcore:20, lwind:40, awg:'20', core:'air', mu:100};
 
-/* =====================================================
-   FUNCIONES
-===================================================== */
+  // ---------- "Limpiar" clears the form to blank, it does not reload a preset ----------
+  $('clearBtn').addEventListener('click', ()=>{
+    [voltEl,currEl,freqEl,dcoreEl,lwindEl,muEl].forEach(el=>{ el.value=''; });
+    awgEl.selectedIndex = 4; // AWG 20, matches the readout's default gauge
+    coreEl.value='air';
+    muField.style.display='none';
+    updateAwgReadout();
+    exampleIdx = 0;
+    $('exampleLabel').textContent='';
+    resultsEl.innerHTML = '<p style="color:var(--ink-soft)">Formulario limpio. Completa los datos y pulsa «Calcular bobina», o carga un ejemplo viable.</p>';
+    voltEl.focus();
+  });
 
-function numero(id){
+  // ---------- viable examples ----------
+  // Chosen so the required inductance stays modest relative to the tube size,
+  // so the search converges with a sensible, buildable number of turns.
+  const EXAMPLES = [
+    {name:'Bobina de aire para RF pequeña', volt:5, curr:0.3, freq:2000, dcore:18, lwind:30, awg:'24', core:'air', mu:1},
+    {name:'Choque de audio con núcleo de ferrita', volt:9, curr:0.4, freq:500, dcore:22, lwind:35, awg:'22', core:'ferrite', mu:600},
+    {name:'Inductor de banco a 60 Hz con núcleo ferromagnético', volt:6, curr:0.6, freq:60, dcore:28, lwind:45, awg:'20', core:'ferro', mu:150},
+    {name:'Bobina de aire para resonancia de alta frecuencia', volt:3, curr:0.15, freq:15000, dcore:12, lwind:20, awg:'28', core:'air', mu:1}
+  ];
+  let exampleIdx = 0;
 
-    return parseFloat(
-        document.getElementById(id).value
-    ) || 0;
+  $('exampleBtn').addEventListener('click', ()=>{
+    const ex = EXAMPLES[exampleIdx % EXAMPLES.length];
+    exampleIdx++;
+    voltEl.value=ex.volt; currEl.value=ex.curr; freqEl.value=ex.freq;
+    dcoreEl.value=ex.dcore; lwindEl.value=ex.lwind; awgEl.value=ex.awg;
+    coreEl.value=ex.core; muEl.value=ex.mu;
+    muField.style.display = ex.core==='air' ? 'none' : 'block';
+    updateAwgReadout();
+    $('exampleLabel').textContent = 'Ejemplo ' + (((exampleIdx-1)%EXAMPLES.length)+1) + ' de ' + EXAMPLES.length + ': ' + ex.name;
+    calc();
+  });
 
-}
+  // ---------- geometry / physics ----------
+  function layerGeometry(N, d_w, L_wind_mm){
+    const N_layer = Math.max(1, Math.floor(L_wind_mm / d_w));
+    const n_layers = Math.max(1, Math.ceil(N / N_layer));
+    const N_last = N - (n_layers-1)*N_layer;
+    return {N_layer, n_layers, N_last};
+  }
 
+  // Wheeler's approximate multilayer-solenoid formula, inches in / uH out
+  function inductanceUH(N, d_w, D_core_mm, L_wind_mm, mu_r){
+    const g = layerGeometry(N, d_w, L_wind_mm);
+    const c_mm = g.n_layers * d_w;                 // radial build
+    const a_mm = D_core_mm/2 + c_mm/2;              // mean radius
+    const b_mm = Math.min(L_wind_mm, g.N_layer*d_w); // axial length used
+    const a=a_mm/25.4, b=b_mm/25.4, c=c_mm/25.4;
+    const denom = 6*a + 9*b + 10*c;
+    if(denom<=0) return 0;
+    let L = 0.8 * a*a * N*N / denom;
+    if(mu_r && mu_r>1) L *= mu_r;
+    return L;
+  }
 
-function formato(valor,decimales=3){
-
-    if(!isFinite(valor)) return "—";
-
-    return valor.toLocaleString(
-        "es-CO",
-        {
-            maximumFractionDigits:decimales
+  function findN(target_L_H, d_w, D_core_mm, L_wind_mm, mu_r){
+    const target_uH = target_L_H*1e6;
+    let prevL=0;
+    for(let N=1;N<=MAX_N;N++){
+      const L = inductanceUH(N, d_w, D_core_mm, L_wind_mm, mu_r);
+      if(L>=target_uH){
+        if(N>1){
+          const dN=Math.abs(L-target_uH), dP=Math.abs(prevL-target_uH);
+          return dP<dN ? N-1 : N;
         }
-    );
+        return N;
+      }
+      prevL=L;
+    }
+    return null; // did not converge inside MAX_N
+  }
 
-}
+  function wireLengthTotal_m(N, d_w, D_core_mm, L_wind_mm){
+    const g = layerGeometry(N, d_w, L_wind_mm);
+    let total_mm = 0;
+    for(let k=1;k<=g.n_layers;k++){
+      const turns = (k<g.n_layers) ? g.N_layer : g.N_last;
+      const D_k = D_core_mm + d_w*(2*k-1); // mean diameter of layer k
+      total_mm += turns * Math.PI * D_k;
+    }
+    return total_mm/1000;
+  }
 
+  function fmt(n, dec){ if(n===null||n===undefined||!isFinite(n)) return '—'; return n.toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
 
-function tabla(id,filas){
+  function chooseInductanceUnit(L_H){
+    if(L_H>=1) return {v:L_H, u:'H'};
+    if(L_H>=1e-3) return {v:L_H*1e3, u:'mH'};
+    return {v:L_H*1e6, u:'µH'};
+  }
 
-    let html="<table>";
+  // ---------- main calc ----------
+  function calc(){
+    const V=parseFloat(voltEl.value), I=parseFloat(currEl.value), f=parseFloat(freqEl.value);
+    const D_core=parseFloat(dcoreEl.value), L_wind=parseFloat(lwindEl.value);
+    const gauge=awgEl.value, d_bare=AWG[gauge].bare, d_w=AWG[gauge].ins, area=AWG[gauge].area;
+    const coreType=coreEl.value;
+    const mu_r = coreType==='air' ? 1 : parseFloat(muEl.value)||1;
 
-    filas.forEach((fila,i)=>{
-
-        if(i===0){
-
-            html+=
-            "<tr>"+
-            "<th>"+fila[0]+"</th>"+
-            "<th>"+fila[1]+"</th>"+
-            "</tr>";
-
-        }else{
-
-            html+=
-            "<tr>"+
-            "<td>"+fila[0]+"</td>"+
-            "<td>"+fila[1]+"</td>"+
-            "</tr>";
-
-        }
-
-    });
-
-    html+="</table>";
-
-    document.getElementById(id).innerHTML=html;
-
-}
-
-
-/* =====================================================
-   AWG MÁS CERCANO
-===================================================== */
-
-function awgMasCercano(area){
-
-    let mejor=null;
-
-    let diferencia=Infinity;
-
-    for(const awg in AWG){
-
-        const dif=Math.abs(
-            AWG[awg]-area
-        );
-
-        if(dif<diferencia){
-
-            diferencia=dif;
-
-            mejor=awg;
-
-        }
-
+    if(!(V>0)||!(I>0)||!(f>0)||!(D_core>0)||!(L_wind>0)){
+      resultsEl.innerHTML = '<p style="color:var(--red)">Completa todos los datos con valores mayores que cero para ver el cálculo.</p>';
+      return;
+    }
+    if(d_w > L_wind){
+      resultsEl.innerHTML = '<p style="color:var(--red)">El diámetro del alambre (con esmalte ≈ '+d_w.toFixed(3)+' mm) es mayor que la longitud disponible para el devanado ('+L_wind+' mm). No cabe ni una espira: aumenta la longitud disponible o usa un calibre más delgado.</p>';
+      return;
     }
 
-    return mejor;
+    // electrical
+    const X_L = V / I;
+    const L_req_H = X_L / (2*Math.PI*f);
 
-}
+    // winding search
+    const N = findN(L_req_H, d_w, D_core, L_wind, mu_r);
+    const cappedResult = (N===null);
+    const N_final = cappedResult ? MAX_N : N;
+    const g = layerGeometry(N_final, d_w, L_wind);
+    const L_est_H = inductanceUH(N_final, d_w, D_core, L_wind, mu_r)/1e6;
+    const wireLen_m = wireLengthTotal_m(N_final, d_w, D_core, L_wind);
+    const R = RHO * wireLen_m / area;
+    const Z = Math.sqrt(R*R + X_L*X_L);
+    const S = V*I;
+    const Q = I*I*X_L;
+    const Pcu = I*I*R;
+    const outerD = D_core + 2*g.n_layers*d_w;
+    const usedLength = Math.min(L_wind, g.N_layer*d_w);
+    const maxCurrentGauge = area * J_MAX;
 
+    // ---------- viability ----------
+    const turnsRisk = N_final<=300 ? 0 : N_final<=1000 ? 1 : 2;
+    const layersRisk = g.n_layers<=3 ? 0 : g.n_layers<=8 ? 1 : 2;
+    const wireRisk = wireLen_m<=50 ? 0 : wireLen_m<=150 ? 1 : 2;
+    const convergeRisk = cappedResult ? 2 : 0;
+    const currentRisk = I> maxCurrentGauge*2 ? 2 : I>maxCurrentGauge ? 1 : 0;
+    const risk = Math.max(turnsRisk, layersRisk, wireRisk, convergeRisk, currentRisk);
 
-/* =====================================================
-   CALCULO PRINCIPAL
-===================================================== */
-
-function calcular(){
-
-
-    /* -----------------------------------------------
-       DATOS
-    ----------------------------------------------- */
-
-    const V=numero("voltaje");
-
-    const I=numero("corriente");
-
-    const f=numero("frecuencia");
-
-    const Lobjetivo=
-        numero("inductancia")/1000;
-
-    const Idc=
-        numero("corrienteDC");
-
-
-    /* -----------------------------------------------
-       NÚCLEO
-    ----------------------------------------------- */
-
-    const Ae=
-        numero("Ae")*1e-4;
-
-    const Aw=
-        numero("Aw")*1e-4;
-
-    const le=
-        numero("le")/100;
-
-    const lg=
-        numero("entrehierro")/1000;
-
-    const mur=
-        numero("mur");
-
-    const Bmax=
-        numero("Bmax")*
-        numero("margenB");
-
-
-    /* -----------------------------------------------
-       GEOMETRÍA
-    ----------------------------------------------- */
-
-    const ancho=
-        numero("anchoVentana");
-
-    const altura=
-        numero("alturaVentana");
-
-    const Dmedio=
-        numero("diametroMedio");
-
-    const separacion=
-        numero("separacionCapas");
-
-
-    /* -----------------------------------------------
-       ELECTRICIDAD
-    ----------------------------------------------- */
-
-    let XL=0;
-
-    if(f>0 && Lobjetivo>0){
-
-        XL=
-            2*Math.PI*f*Lobjetivo;
-
+    let level, flagText, message;
+    if(risk>=2){
+      level='rojo'; flagText='ROJO — diseño poco práctico';
+      message = cappedResult
+        ? 'La inductancia requerida ('+fmt(L_req_H*1000,2)+' mH) es demasiado alta para estas dimensiones: ni con '+MAX_N.toLocaleString('es-CO')+' espiras se alcanza. El resultado matemático no representa una recomendación práctica de fabricación.'
+        : 'La combinación de espiras, capas y longitud de alambre que exige esta inductancia no es razonable para una práctica artesanal. El cálculo es matemáticamente correcto, pero no se recomienda intentar bobinarlo así.';
+    } else if(risk===1){
+      level='amarillo'; flagText='AMARILLO — diseño exigente';
+      message = 'La cantidad de espiras y/o capas es alta. La bobina puede ser laboriosa o difícil de fabricar a mano con precisión. Es viable, pero considera las alternativas de abajo antes de empezar a enrollar.';
+    } else {
+      level='verde'; flagText='VERDE — diseño razonable';
+      message = 'La cantidad de espiras y capas es razonable para una práctica de laboratorio con materiales artesanales.';
     }
 
-
-    /* -----------------------------------------------
-       RELUCTANCIA
-    ----------------------------------------------- */
-
-    let reluctancia=0;
-
-
-    if(Ae>0){
-
-        if(le>0 && mur>0){
-
-            reluctancia+=
-                le/
-                (MU0*mur*Ae);
-
-        }
-
-
-        if(lg>0){
-
-            reluctancia+=
-                lg/
-                (MU0*Ae);
-
-        }
-
+    // ---------- suggestions ----------
+    const sug = [];
+    if(convergeRisk||turnsRisk===2){
+      sug.push('Usar un núcleo ferromagnético o de ferrita: al aumentar μr efectivo, la misma inductancia se logra con muchas menos espiras.');
+      sug.push('Revisar si el punto de operación (V, I, f) es el correcto — reducir la reactancia objetivo (más corriente, menos voltaje o menor frecuencia) baja directamente la inductancia requerida.');
+    }
+    if(layersRisk>=1){
+      sug.push('Aumentar el diámetro de la tubería o la longitud disponible del devanado: un radio medio mayor produce más inductancia por espira, reduciendo el número de capas necesarias.');
+    }
+    if(wireRisk>=1){
+      sug.push('Con más capas, cada vuelta es más larga y cara: si el diseño lo permite, prioriza aumentar dimensiones antes que multiplicar capas.');
+    }
+    if(currentRisk>=1){
+      sug.push('La corriente objetivo es alta para el calibre AWG '+gauge+' (máximo orientativo ≈ '+fmt(maxCurrentGauge,2)+' A). Usa un calibre más grueso (número AWG menor) para evitar calentamiento excesivo.');
+    }
+    if(sug.length===0){
+      sug.push('El diseño actual no necesita ajustes para ser viable en el laboratorio. Aun así, deja margen de alambre y mide la bobina terminada para comparar con el estimado.');
     }
 
-
-    /* -----------------------------------------------
-       ESPIRAS POR TENSIÓN
-    ----------------------------------------------- */
-
-    let Nvolt=0;
-
-
-    if(
-        V>0 &&
-        f>0 &&
-        Ae>0 &&
-        Bmax>0
-    ){
-
-        Nvolt=
-            V/
-            (
-                4.44*
-                f*
-                Ae*
-                Bmax
-            );
-
+    // ---------- manufacturing guide ----------
+    // Fixed, short list of practical steps (does not grow with the number of layers).
+    const steps = [];
+    steps.push('Corta aproximadamente <b>'+fmt(wireLen_m*1.1,2)+' m</b> de alambre esmaltado AWG '+gauge+' (incluye ~10% de margen para sujeción y errores).');
+    steps.push('Fija el extremo inicial a la tubería con cinta, dejando unos 5 cm libres para la futura conexión.');
+    steps.push('Enrolla capa por capa siguiendo la tabla de abajo: en cada capa avanza apretando las espiras una junto a otra hasta llenar los '+fmt(usedLength,1)+' mm marcados, y al llegar al final pasa directo a la siguiente capa sin cortar el alambre, invirtiendo el sentido de avance.');
+    steps.push('Remata el extremo final dejando otros ~5 cm libres y fíjalo con cinta para que el devanado no se afloje.');
+    steps.push('Mide con un multímetro la resistencia del devanado y compárala con el valor estimado (R ≈ '+fmt(R,3)+' Ω). Si tienes LCR-metro, mide también la inductancia real y compárala con el estimado (L ≈ '+chooseInductanceUnit(L_est_H).v.toFixed(2)+' '+chooseInductanceUnit(L_est_H).u+').');
+    if(coreType!=='air'){
+      steps.push('Inserta el núcleo dentro de la tubería y vuelve a medir la inductancia: el valor real puede diferir bastante del estimado, porque μr efectivo depende de la geometría real del núcleo.');
     }
 
-
-    /* -----------------------------------------------
-       ESPIRAS POR INDUCTANCIA
-    ----------------------------------------------- */
-
-    let Nind=0;
-
-
-    if(
-        Lobjetivo>0 &&
-        reluctancia>0
-    ){
-
-        Nind=
-            Math.sqrt(
-                Lobjetivo*
-                reluctancia
-            );
-
+    // Compact layer-by-layer table instead of one step per layer — practical even with many layers.
+    let layerRows = '';
+    for(let k=1;k<=g.n_layers;k++){
+      const turns = (k<g.n_layers)?g.N_layer:g.N_last;
+      const dir = (k%2===1)?'→ izquierda a derecha':'← derecha a izquierda';
+      layerRows += '<tr><td>'+k+'</td><td>'+turns+'</td><td>'+dir+'</td></tr>';
     }
 
+    // ---------- render ----------
+    const Lreq = chooseInductanceUnit(L_req_H);
+    const Lest = chooseInductanceUnit(L_est_H);
 
-    /* -----------------------------------------------
-       SELECCIÓN DE N
-    ----------------------------------------------- */
+    resultsEl.innerHTML = `
+      <p class="section-title">Cálculo eléctrico</p>
+      <p class="section-sub">A partir de V, I y f.</p>
+      <div class="calc-line"><span class="k">Reactancia inductiva X_L = V / I</span><span class="v">${fmt(X_L,3)} Ω</span></div>
+      <div class="calc-line"><span class="k">Inductancia requerida L = X_L / (2πf)</span><span class="v">${Lreq.v.toFixed(3)} ${Lreq.u}</span></div>
 
-    const modo=
-        document.getElementById("modo").value;
+      <div class="banner ${level}">
+        <span class="flag">${flagText}</span>
+        ${message}
+      </div>
 
-    let N=0;
+      <p class="section-title">Devanado propuesto</p>
+      <p class="section-sub">Búsqueda iterativa sobre una bobina cilíndrica multicapa (aproximación de Wheeler).</p>
 
+      <div class="metrics-grid">
+        <div class="metric"><div class="label">espiras totales</div><div class="value">${N_final.toLocaleString('es-CO')}</div></div>
+        <div class="metric"><div class="label">espiras por capa</div><div class="value">${g.N_layer}</div></div>
+        <div class="metric"><div class="label">número de capas</div><div class="value">${g.n_layers}</div></div>
+        <div class="metric"><div class="label">espiras última capa</div><div class="value">${g.N_last}</div></div>
+        <div class="metric"><div class="label">inductancia estimada</div><div class="value">${Lest.v.toFixed(3)}<span class="unit">${Lest.u}</span></div></div>
+        <div class="metric"><div class="label">longitud de alambre</div><div class="value">${fmt(wireLen_m,2)}<span class="unit">m</span></div></div>
+        <div class="metric"><div class="label">resistencia del devanado</div><div class="value">${fmt(R,3)}<span class="unit">Ω</span></div></div>
+        <div class="metric"><div class="label">impedancia aproximada</div><div class="value">${fmt(Z,3)}<span class="unit">Ω</span></div></div>
+        <div class="metric"><div class="label">potencia aparente S</div><div class="value">${fmt(S,3)}<span class="unit">VA</span></div></div>
+        <div class="metric"><div class="label">potencia reactiva Q</div><div class="value">${fmt(Q,3)}<span class="unit">VAR</span></div></div>
+        <div class="metric"><div class="label">pérdidas en cobre P_cu</div><div class="value">${fmt(Pcu,3)}<span class="unit">W</span></div></div>
+        <div class="metric"><div class="label">diámetro exterior final</div><div class="value">${fmt(outerD,2)}<span class="unit">mm</span></div></div>
+      </div>
 
-    if(modo==="espiras"){
+      <p class="section-title">Alternativas si el diseño es exigente</p>
+      <ul class="suggestions">${sug.map(s=>'<li>'+s+'</li>').join('')}</ul>
 
-        N=
-            Math.max(
-                Nvolt,
-                Nind
-            );
+      <div class="diagram-wrap">
+        ${buildDiagramSVG(g, D_core, L_wind, usedLength, d_w)}
+        <p class="diagram-caption">corte axial esquemático — no a escala real de espira individual</p>
+      </div>
 
+      <p class="section-title">Guía de fabricación</p>
+      <ol class="steps">${steps.map(s=>'<li>'+s+'</li>').join('')}</ol>
+
+      <p class="layer-table-caption">Marca cada capa a medida que la enrollas:</p>
+      <div class="layer-table-scroll">
+        <table class="spec layer-table">
+          <tr><th>Capa</th><th>Espiras</th><th>Sentido</th></tr>
+          ${layerRows}
+        </table>
+      </div>
+
+      <button class="print-btn" id="printBtn">Imprimir / guardar ficha técnica</button>
+
+      <p class="section-title">Ficha técnica de la bobina</p>
+      <table class="spec">
+        <tr><th>Tensión / corriente / frecuencia</th><td>${V} V · ${I} A · ${f} Hz</td></tr>
+        <tr><th>Reactancia inductiva</th><td>${fmt(X_L,3)} Ω</td></tr>
+        <tr><th>Inductancia requerida</th><td>${Lreq.v.toFixed(3)} ${Lreq.u}</td></tr>
+        <tr><th>Inductancia estimada del devanado</th><td>${Lest.v.toFixed(3)} ${Lest.u}</td></tr>
+        <tr><th>Núcleo</th><td>${coreType==='air'?'Aire (μr = 1)':(coreType==='ferro'?'Ferromagnético':'Ferrita')+' — μr aprox. '+mu_r}</td></tr>
+        <tr><th>Calibre</th><td>AWG ${gauge} · Ø cobre ${d_bare.toFixed(3)} mm · Ø esmaltado ${d_w.toFixed(3)} mm</td></tr>
+        <tr><th>Espiras totales</th><td>${N_final.toLocaleString('es-CO')}</td></tr>
+        <tr><th>Espiras por capa / capas / última capa</th><td>${g.N_layer} / ${g.n_layers} / ${g.N_last}</td></tr>
+        <tr><th>Longitud de alambre</th><td>${fmt(wireLen_m,2)} m</td></tr>
+        <tr><th>Resistencia del devanado</th><td>${fmt(R,3)} Ω</td></tr>
+        <tr><th>Impedancia aproximada</th><td>${fmt(Z,3)} Ω</td></tr>
+        <tr><th>S / Q / P_cu</th><td>${fmt(S,2)} VA / ${fmt(Q,2)} VAR / ${fmt(Pcu,3)} W</td></tr>
+        <tr><th>Diámetro tubería / longitud devanado</th><td>${D_core} mm / ${L_wind} mm</td></tr>
+        <tr><th>Diámetro exterior final</th><td>${fmt(outerD,2)} mm</td></tr>
+        <tr><th>Corriente máx. orientativa para AWG ${gauge}</th><td>≈ ${fmt(maxCurrentGauge,2)} A (a ${J_MAX} A/mm², solo referencia)</td></tr>
+        <tr><th>Estado de viabilidad</th><td>${flagText}</td></tr>
+      </table>
+
+      <p class="caveat">Herramienta educativa para práctica de laboratorio. La inductancia se estima con la fórmula aproximada de Wheeler para solenoides multicapa; el efecto real de núcleos magnéticos depende de su geometría y no de μr por sí solo. Mide siempre la bobina terminada con los instrumentos del laboratorio y usa esos valores, no los estimados, para tu informe.</p>
+    `;
+
+    document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+  }
+
+  function buildDiagramSVG(g, D_core, L_wind, usedLength, d_w){
+    const W=640, H=200;
+    const marginX=40;
+    const scaleX = (W-2*marginX) / Math.max(L_wind, usedLength, 1);
+    const maxRadiusMM = D_core/2 + g.n_layers*d_w;
+    const scaleY = (H*0.38) / Math.max(maxRadiusMM, 1);
+    const cx = W/2, cy = H/2;
+    const coreHalfLenPx = (L_wind*scaleX)/2;
+    const coreHalfHPx = (D_core/2)*scaleY;
+
+    let bands='';
+    for(let k=1; k<=g.n_layers; k++){
+      const innerR = D_core/2 + (k-1)*d_w;
+      const outerR = D_core/2 + k*d_w;
+      const bandHalfLenPx = (usedLength*scaleX)/2;
+      const yTopOuter = cy - outerR*scaleY;
+      const yTopInner = cy - innerR*scaleY;
+      const yBotInner = cy + innerR*scaleY;
+      const yBotOuter = cy + outerR*scaleY;
+      const hBand = Math.max(1, yTopInner - yTopOuter);
+      bands += `<rect x="${cx-bandHalfLenPx}" y="${yTopOuter}" width="${bandHalfLenPx*2}" height="${hBand}" fill="#c9793a" stroke="#8a4c14" stroke-width="0.5" opacity="0.92"/>`;
+      bands += `<rect x="${cx-bandHalfLenPx}" y="${yBotInner}" width="${bandHalfLenPx*2}" height="${hBand}" fill="#c9793a" stroke="#8a4c14" stroke-width="0.5" opacity="0.92"/>`;
     }
 
-    else if(
-        modo==="inductancia" ||
-        modo==="verificar"
-    ){
-
-        N=Nind || Nvolt;
-
-    }
-
-    else{
-
-        /*
-        Diseño desde cero:
-        escogemos el mayor valor para
-        cumplir inductancia y flujo.
-        */
-
-        N=
-            Math.max(
-                Nvolt,
-                Nind
-            );
-
-    }
-
-
-    N=Math.ceil(N);
-
-
-    /* -----------------------------------------------
-       CONDUCTOR
-    ----------------------------------------------- */
-
-    let areaCable=
-        numero("areaCable");
-
-    const modoCable=
-        document.getElementById("modoCable").value;
-
-    const awg=
-        Math.round(
-            numero("awg")
-        );
-
-    const J=
-        numero("densidad");
-
-
-    if(modoCable==="awg"){
-
-        if(AWG[awg]){
-
-            areaCable=
-                AWG[awg];
-
-        }
-
-    }
-
-
-    if(modoCable==="auto"){
-
-        if(I>0 && J>0){
-
-            areaCable=
-                I/J;
-
-        }
-
-    }
-
-
-    /* -----------------------------------------------
-       DIÁMETRO
-    ----------------------------------------------- */
-
-    let diametro=
-
-        areaCable>0
-
-        ?
-
-        Math.sqrt(
-            4*
-            areaCable/
-            Math.PI
-        )
-
-        :0;
-
-
-    let diametroExterior=
-        numero("diametroExterior");
-
-
-    if(
-        modoCable==="auto" &&
-        diametro>0
-    ){
-
-        /*
-        Aproximación de aislamiento.
-        */
-
-        diametroExterior=
-            diametro*1.15;
-
-    }
-
-
-    /* -----------------------------------------------
-       VUELTAS POR CAPA
-    ----------------------------------------------- */
-
-    let vueltasCapa=0;
-
-
-    if(diametroExterior>0){
-
-        vueltasCapa=
-            Math.floor(
-                ancho/
-                diametroExterior
-            );
-
-    }
-
-
-    /* -----------------------------------------------
-       CAPAS
-    ----------------------------------------------- */
-
-    let capas=0;
-
-
-    if(vueltasCapa>0){
-
-        capas=
-            Math.ceil(
-                N/
-                vueltasCapa
-            );
-
-    }
-
-
-    /* -----------------------------------------------
-       ALTURA
-    ----------------------------------------------- */
-
-    const pasoCapa=
-        diametroExterior+
-        separacion;
-
-    const alturaDevanado=
-        capas*
-        pasoCapa;
-
-
-    /* -----------------------------------------------
-       LONGITUD DE ALAMBRE
-    ----------------------------------------------- */
-
-    let longitud=0;
-
-    let restantes=N;
-
-
-    for(
-        let capa=0;
-        capa<capas;
-        capa++
-    ){
-
-        const vueltas=
-
-            Math.min(
-                vueltasCapa,
-                restantes
-            );
-
-
-        const D=
-            Dmedio+
-            2*
-            capa*
-            pasoCapa;
-
-
-        longitud+=
-            vueltas*
-            Math.PI*
-            D;
-
-
-        restantes-=vueltas;
-
-    }
-
-
-    /* -----------------------------------------------
-       RESISTENCIA
-    ----------------------------------------------- */
-
-    const material=
-        document.getElementById("material").value;
-
-
-    let rho=0.0175;
-
-
-    if(material==="aluminio"){
-
-        rho=0.0282;
-
-    }
-
-
-    let R=0;
-
-
-    if(areaCable>0){
-
-        R=
-            rho*
-            longitud/
-            areaCable;
-
-    }
-
-
-    /* -----------------------------------------------
-       IMPEDANCIA
-    ----------------------------------------------- */
-
-    const Z=
-        Math.sqrt(
-            R*R+
-            XL*XL
-        );
-
-
-    let Ireal=0;
-
-
-    if(Z>0 && V>0){
-
-        Ireal=
-            V/Z;
-
-    }
-
-
-    /* -----------------------------------------------
-       POTENCIAS
-    ----------------------------------------------- */
-
-    const Pcu=
-        Ireal*
-        Ireal*
-        R;
-
-
-    const S=
-        V*
-        Ireal;
-
-
-    const Q=
-        Ireal*
-        Ireal*
-        XL;
-
-
-    const FP=
-        Z>0
-        ?
-        R/Z
-        :
-        0;
-
-
-    /* -----------------------------------------------
-       FLUJO
-    ----------------------------------------------- */
-
-    let B=0;
-
-
-    if(
-        N>0 &&
-        Ae>0 &&
-        f>0
-    ){
-
-        B=
-            V/
-            (
-                4.44*
-                f*
-                N*
-                Ae
-            );
-
-    }
-
-
-    const flujo=
-        B*Ae;
-
-
-    /* -----------------------------------------------
-       INDUCTANCIA REAL
-    ----------------------------------------------- */
-
-    let Lreal=0;
-
-
-    if(reluctancia>0){
-
-        Lreal=
-            N*N/
-            reluctancia;
-
-    }
-
-
-    /* -----------------------------------------------
-       LLENADO
-    ----------------------------------------------- */
-
-    let porcentajeLlenado=0;
-
-
-    if(
-        Aw>0 &&
-        areaCable>0
-    ){
-
-        porcentajeLlenado=
-            (
-                N*
-                areaCable/
-                Aw
-            )*
-            100;
-
-    }
-
-
-    /* -----------------------------------------------
-       DENSIDAD REAL
-    ----------------------------------------------- */
-
-    let densidadReal=0;
-
-
-    if(areaCable>0){
-
-        densidadReal=
-            Ireal/
-            areaCable;
-
-    }
-
-
-    /* -----------------------------------------------
-       VALIDACIONES
-    ----------------------------------------------- */
-
-    let problemas=[];
-
-
-    if(B>numero("Bmax")){
-
-        problemas.push(
-            "La densidad de flujo supera Bmax."
-        );
-
-    }
-
-
-    if(
-        alturaDevanado>
-        altura
-    ){
-
-        problemas.push(
-            "El devanado no cabe en la altura disponible."
-        );
-
-    }
-
-
-    if(
-        porcentajeLlenado>
-        numero("factorLlenado")*100
-    ){
-
-        problemas.push(
-            "El factor de llenado es demasiado alto."
-        );
-
-    }
-
-
-    if(
-        densidadReal>
-        J
-    ){
-
-        problemas.push(
-            "La densidad de corriente supera el límite."
-        );
-
-    }
-
-
-    /* -----------------------------------------------
-       ESTADO
-    ----------------------------------------------- */
-
-    const estado=
-        document.getElementById("estado");
-
-
-    if(problemas.length===0){
-
-        estado.className=
-            "status ok";
-
-        estado.innerHTML=
-            "<b>🟢 DISEÑO PRELIMINAR VIABLE</b><br>"+
-            "Los parámetros introducidos no presentan "+
-            "violaciones básicas en este modelo.";
-
-    }
-
-    else{
-
-        estado.className=
-            "status bad";
-
-        estado.innerHTML=
-            "<b>🔴 REVISAR DISEÑO</b><br>"+
-            problemas.join("<br>");
-
-    }
-
-
-    /* -----------------------------------------------
-       MÉTRICAS PRINCIPALES
-    ----------------------------------------------- */
-
-    const metricas=[
-
-        [
-            "Inductancia objetivo",
-            formato(Lobjetivo*1000)+" mH"
-        ],
-
-        [
-            "Inductancia calculada",
-            formato(Lreal*1000)+" mH"
-        ],
-
-        [
-            "Número de espiras",
-            formato(N,0)
-        ],
-
-        [
-            "AWG aproximado",
-            awgMasCercano(areaCable)
-        ],
-
-        [
-            "Reactancia",
-            formato(XL)+" Ω"
-        ],
-
-        [
-            "Resistencia",
-            formato(R)+" Ω"
-        ],
-
-        [
-            "Impedancia",
-            formato(Z)+" Ω"
-        ],
-
-        [
-            "Corriente real",
-            formato(Ireal)+" A"
-        ],
-
-        [
-            "Capas",
-            formato(capas,0)
-        ],
-
-        [
-            "Longitud de alambre",
-            formato(longitud)+" m"
-        ],
-
-        [
-            "Densidad de flujo",
-            formato(B)+" T"
-        ],
-
-        [
-            "Pérdidas cobre",
-            formato(Pcu)+" W"
-        ]
-
-    ];
-
-
-    document.getElementById(
-        "metricas"
-    ).innerHTML=
-
-        metricas.map(
-            dato=>`
-
-            <div class="metric">
-
-                <div class="metric-title">
-                    ${dato[0]}
-                </div>
-
-                <div class="metric-value">
-                    ${dato[1]}
-                </div>
-
-            </div>
-
-            `
-        ).join("");
-
-
-    /* -----------------------------------------------
-       TABLA MAGNÉTICA
-    ----------------------------------------------- */
-
-    tabla(
-        "resultadoMagnetico",
-
-        [
-
-            [
-                "Parámetro",
-                "Resultado"
-            ],
-
-            [
-                "Ae",
-                formato(numero("Ae"))+" cm²"
-            ],
-
-            [
-                "Reluctancia",
-                formato(reluctancia)+" A/Wb"
-            ],
-
-            [
-                "Espiras por voltios",
-                formato(Nvolt,1)
-            ],
-
-            [
-                "Espiras por inductancia",
-                formato(Nind,1)
-            ],
-
-            [
-                "B calculada",
-                formato(B)+" T"
-            ],
-
-            [
-                "Flujo",
-                formato(flujo*1000)+" mWb"
-            ],
-
-            [
-                "Entrehierro",
-                formato(numero("entrehierro"))+" mm"
-            ]
-
-        ]
-
-    );
-
-
-    /* -----------------------------------------------
-       TABLA DEVANADO
-    ----------------------------------------------- */
-
-    tabla(
-        "resultadoDevanado",
-
-        [
-
-            [
-                "Parámetro",
-                "Resultado"
-            ],
-
-            [
-                "Área cobre",
-                formato(areaCable)+" mm²"
-            ],
-
-            [
-                "Diámetro cobre",
-                formato(diametro)+" mm"
-            ],
-
-            [
-                "Diámetro exterior",
-                formato(diametroExterior)+" mm"
-            ],
-
-            [
-                "Vueltas/capa",
-                formato(vueltasCapa,0)
-            ],
-
-            [
-                "Número de capas",
-                formato(capas,0)
-            ],
-
-            [
-                "Altura devanado",
-                formato(alturaDevanado)+" mm"
-            ],
-
-            [
-                "Llenado",
-                formato(porcentajeLlenado)+" %"
-            ],
-
-            [
-                "Longitud",
-                formato(longitud)+" m"
-            ]
-
-        ]
-
-    );
-
-
-    /* -----------------------------------------------
-       TABLA ELÉCTRICA
-    ----------------------------------------------- */
-
-    tabla(
-        "resultadoElectrico",
-
-        [
-
-            [
-                "Parámetro",
-                "Resultado"
-            ],
-
-            [
-                "XL",
-                formato(XL)+" Ω"
-            ],
-
-            [
-                "R",
-                formato(R)+" Ω"
-            ],
-
-            [
-                "|Z|",
-                formato(Z)+" Ω"
-            ],
-
-            [
-                "Corriente",
-                formato(Ireal)+" A"
-            ],
-
-            [
-                "P cobre",
-                formato(Pcu)+" W"
-            ],
-
-            [
-                "Potencia aparente",
-                formato(S)+" VA"
-            ],
-
-            [
-                "Potencia reactiva",
-                formato(Q)+" var"
-            ],
-
-            [
-                "Factor de potencia",
-                formato(FP,3)
-            ]
-
-        ]
-
-    );
-
-
-    /* -----------------------------------------------
-       DIBUJAR
-    ----------------------------------------------- */
-
-    dibujarBobina(
-        capas,
-        vueltasCapa,
-        diametroExterior
-    );
-
-}
-
-
-/* =====================================================
-   DIBUJO
-===================================================== */
-
-function dibujarBobina(
-    capas,
-    vueltas,
-    diametro
-){
-
-    const canvas=
-        document.getElementById(
-            "grafico"
-        );
-
-
-    const ctx=
-        canvas.getContext("2d");
-
-
-    const W=canvas.width;
-
-    const H=canvas.height;
-
-
-    ctx.clearRect(
-        0,
-        0,
-        W,
-        H
-    );
-
-
-    /* núcleo */
-
-    ctx.strokeStyle=
-        "#657894";
-
-    ctx.lineWidth=3;
-
-
-    ctx.strokeRect(
-        150,
-        55,
-        900,
-        210
-    );
-
-
-    /* ventana */
-
-    ctx.strokeRect(
-        320,
-        85,
-        560,
-        150
-    );
-
-
-    /* devanado */
-
-    const columnas=
-        Math.min(
-            vueltas,
-            90
-        );
-
-
-    const filas=
-        Math.min(
-            capas,
-            14
-        );
-
-
-    for(
-        let fila=0;
-        fila<filas;
-        fila++
-    ){
-
-        for(
-            let columna=0;
-            columna<columnas;
-            columna++
-        ){
-
-            const x=
-                340+
-                columna*
-                (
-                    520/
-                    Math.max(
-                        columnas-1,
-                        1
-                    )
-                );
-
-
-            const y=
-                100+
-                fila*
-                (
-                    120/
-                    Math.max(
-                        filas-1,
-                        1
-                    )
-                );
-
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                x,
-                y,
-                4,
-                0,
-                Math.PI*2
-            );
-
-
-            ctx.strokeStyle=
-                "#58a6ff";
-
-
-            ctx.stroke();
-
-        }
-
-    }
-
-
-    ctx.fillStyle=
-        "#b9c9df";
-
-    ctx.font=
-        "15px Arial";
-
-
-    ctx.fillText(
-        "Representación conceptual del núcleo y devanado",
-        20,
-        30
-    );
-
-
-    ctx.fillText(
-        "Núcleo",
-        570,
-        285
-    );
-
-}
-
-
-/* =====================================================
-   EJEMPLO
-===================================================== */
-
-function ejemplo(){
-
-    document.getElementById("voltaje").value=120;
-
-    document.getElementById("corriente").value=1;
-
-    document.getElementById("frecuencia").value=60;
-
-    document.getElementById("inductancia").value=318;
-
-    document.getElementById("Ae").value=10;
-
-    document.getElementById("Aw").value=14;
-
-    document.getElementById("le").value=10;
-
-    document.getElementById("entrehierro").value=.5;
-
-    document.getElementById("Bmax").value=.8;
-
-    document.getElementById("mur").value=2500;
-
-    document.getElementById("densidad").value=3;
-
-    document.getElementById("modoCable").value="auto";
-
-    calcular();
-
-}
-
-
-/* =====================================================
-   RESTABLECER
-===================================================== */
-
-function limpiar(){
-
-    location.reload();
-
-}
-
-
-/* =====================================================
-   CÁLCULO INICIAL
-===================================================== */
-
-calcular();
-
+    return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <line x1="${marginX-10}" y1="${cy}" x2="${W-marginX+10}" y2="${cy}" stroke="#c3ccca" stroke-width="1" stroke-dasharray="3 3"/>
+      <rect x="${cx-coreHalfLenPx}" y="${cy-coreHalfHPx}" width="${coreHalfLenPx*2}" height="${coreHalfHPx*2}" fill="#dfe5ea" stroke="#5c6f95" stroke-width="1"/>
+      ${bands}
+      <text x="${marginX-10}" y="${H-14}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#3f5a61">tubería Ø${D_core}mm</text>
+      <text x="${W-marginX-100}" y="${H-14}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#3f5a61">${g.n_layers} capa(s) · ${d_w.toFixed(2)}mm/hilo</text>
+    </svg>`;
+  }
+
+  // initial run
+  calc();
+})();
 </script>
-
 </body>
 </html>
